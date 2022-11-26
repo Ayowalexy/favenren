@@ -44,7 +44,7 @@ const Login = () => {
                     >Phone number</Text>
                     <PhoneInput
                         containerStyle={{
-                            border:'1px solid rgba(0,0,0,0.1)',
+                            border: '1px solid rgba(0,0,0,0.1)',
                             borderRadius: '10px'
                         }}
                         inputStyle={{
@@ -97,14 +97,19 @@ const Login = () => {
                             backgroundColor='#F7F8F9'
                             border='1px solid rgba(0,0,0,0.4)'
                         />
-                        <InputRightElement 
-                            onClick={() => setShow(!show)} padding={'30px'} 
-                            children={<Text>{ show ? <AiFillEye size='20px' fill='#69ACD1' /> : <AiFillEyeInvisible size='20px' fill='#69ACD1' />}</Text>} 
-                            />
+                        <InputRightElement
+                            onClick={() => setShow(!show)} padding={'30px'}
+                            children={<Text>{show ? <AiFillEye size='20px' fill='#69ACD1' /> : <AiFillEyeInvisible size='20px' fill='#69ACD1' />}</Text>}
+                        />
                     </InputGroup>
 
                 </VStack>
-                <Text alignSelf='flex-end' fontFamily='Poppins' fontWeight={500} padding='10px 0px' color='#69ACD1'>Forgot Password</Text>
+
+                <HStack  alignSelf='flex-end'>
+                    <Link href='/Auth/forgot-password'>
+                        <Text fontFamily='Poppins' textAlign='left' fontWeight={500} padding='10px 0px' color='#69ACD1'>Forgot Password</Text>
+                    </Link>
+                </HStack>
                 <Button
                     outline='none'
                     color='#fff'
@@ -124,7 +129,7 @@ const Login = () => {
                             fontSize='15px'
                             fontWeight={500}
                         >Sign up</Text>
-                     </Link>
+                    </Link>
 
                 </HStack>
             </VStack>
