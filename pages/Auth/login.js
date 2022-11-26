@@ -1,9 +1,11 @@
 import AuthLayout from '../../public/components/AuthLayout'
 import { Text, Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Image, Box } from "@chakra-ui/react";
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
+import { AiFillEye, AiFillEyeInvisible, AiFillAccountBook } from 'react-icons/ai'
 import { useState } from "react";
-import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+import { CheckboxIcon } from '@chakra-ui/react';
+
 import Link from 'next/link';
 
 
@@ -16,64 +18,70 @@ const Login = () => {
         <AuthLayout>
             <VStack
                 width='60%'
-                spacing='20px'
+                spacing='30px'
                 align='center'
                 justify='center'
             >
                 <Text
                     color='#000'
                     fontSize='20px'
-                    fontWeight={400}
-                    fontFamily='Poppin'
+                    fontWeight={700}
+                    fontFamily='Poppins'
                 >
                     Welcome back, Sign in.
                 </Text>
 
                 <VStack
-                    spacing='0px'
+                    spacing='5px'
                     align='flex-start'
                     width='100%'
                 >
                     <Text
                         fontSize='16px'
                         color='#000'
-                        fontWeight={400}
-                        fontFamily='Poppin'
+                        fontWeight={500}
+                        fontFamily='Poppins'
                     >Phone number</Text>
                     <PhoneInput
-                        style={{
-                            width: '100%'
+                        containerStyle={{
+                            border:'1px solid rgba(0,0,0,0.1)',
+                            borderRadius: '10px'
                         }}
-                        inputComponent={() => {
-                            return (
-                                <Input
-                                    color='rgba(0,0,0,5)'
-                                    fontWeight='bold'
-                                    fontSize='15px'
-                                    paddingLeft='20px'
-                                    placeholder="8X XXX XXXX" width='100%' height='60px' borderRadius='10px' backgroundColor='#F7F8F9' border='none' />
-                            )
+                        inputStyle={{
+                            color: 'rgba(0,0,0,5)',
+                            fontWeight: 'bold',
+                            fontSize: '15px',
+                            paddingLeft: '80px',
+                            width: '100%',
+                            height: '60px',
+                            borderRadius: '10px',
+                            backgroundColor: '#F7F8F9',
+                            border: 'none'
                         }}
-                        smartCaret={false}
-                        withCountryCallingCode={true}
-
+                        country={'ng'}
                         value={value}
-                        defaultCountry='NG'
-                        onChange={setValue} />
+                        placeholder='8X XXX XXXX'
+                        onChange={phone => setValue(phone)}
+                        buttonStyle={{
+                            width: '70px',
+                            border: 'none',
+                            paddingLeft: '15px'
+                        }}
+                    />
 
 
                 </VStack>
 
                 <VStack
-                    spacing='0px'
+                    spacing='5px'
                     align='flex-start'
                     width='100%'
                 >
                     <Text
                         fontSize='16px'
                         color='#000'
-                        fontWeight={400}
-                        fontFamily='Poppin'
+                        fontWeight={500}
+                        fontFamily='Poppins'
                     >Password</Text>
                     <InputGroup>
                         <Input
@@ -82,12 +90,21 @@ const Login = () => {
                             fontSize='15px'
                             paddingLeft='20px'
                             type={show ? 'text' : 'password'}
-                            placeholder='Your password' width='100%' height='60px' borderRadius='10px' backgroundColor='#F7F8F9' border='none' />
-                        <InputRightElement onClick={() => setShow(!show)} padding={'20px'} children={show ? <AiFillEye size='20px' fill='#69ACD1' /> : <AiFillEyeInvisible size='20px' fill='#69ACD1' />} />
+                            placeholder='Your password'
+                            width='100%'
+                            height='60px'
+                            borderRadius='10px'
+                            backgroundColor='#F7F8F9'
+                            border='1px solid rgba(0,0,0,0.4)'
+                        />
+                        <InputRightElement 
+                            onClick={() => setShow(!show)} padding={'30px'} 
+                            children={<Text>{ show ? <AiFillEye size='20px' fill='#69ACD1' /> : <AiFillEyeInvisible size='20px' fill='#69ACD1' />}</Text>} 
+                            />
                     </InputGroup>
 
                 </VStack>
-                <Text alignSelf='flex-end' color='#69ACD1'>Forgot Password</Text>
+                <Text alignSelf='flex-end' fontFamily='Poppins' fontWeight={500} padding='10px 0px' color='#69ACD1'>Forgot Password</Text>
                 <Button
                     outline='none'
                     color='#fff'
@@ -99,14 +116,15 @@ const Login = () => {
                     <Text
                         color='rgba(0,0,0.0.4)'
                         fontSize='15px'
-                        fontWeight='bold'
-                    >Don't have an account</Text>
-                   <Link href='/Auth/signup'>
-                   <Text
-                        color='#69ACD1'
-                        fontSize='15px'
-                        fontWeight='bold'
-                    >Sign up</Text></Link>
+                        fontWeight={500}
+                    >Don't have an account?</Text>
+                    <Link href='/Auth/signup'>
+                        <Text
+                            color='#69ACD1'
+                            fontSize='15px'
+                            fontWeight={500}
+                        >Sign up</Text>
+                     </Link>
 
                 </HStack>
             </VStack>

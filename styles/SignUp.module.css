@@ -1,0 +1,11 @@
+.select_country {
+    color: 'rgba(0,0,0,5)';
+    font-weight: 'bold';
+    font-size: '15px';
+    padding-left: '80px';
+    width: '100%';
+    height: '60px';
+    border-radius: '10px';
+    background-color: '#F7F8F9';
+    border: 'none';
+  }

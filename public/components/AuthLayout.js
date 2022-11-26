@@ -1,4 +1,8 @@
-import { Text, Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Image, Box } from "@chakra-ui/react";
+import {
+    Text,
+    Avatar,
+    Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Image, Box
+} from "@chakra-ui/react";
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 import { useState } from "react";
 import 'react-phone-number-input/style.css'
@@ -14,6 +18,7 @@ const AuthLayout = ({ children }) => {
             justify='space-between'
             height='100vh'
             width='100%'
+            backgroundColor='#fff'
         >
             <VStack
                 width='50%'
@@ -21,8 +26,10 @@ const AuthLayout = ({ children }) => {
                 justify='center'
                 height='100vh'
                 overflow='scroll'
+                backgroundColor='#fff'
+
             >
-               {children}
+                {children}
             </VStack>
             <VStack
                 height='100vh'
@@ -33,19 +40,21 @@ const AuthLayout = ({ children }) => {
                 backgroundColor='#F7F8F9'
             >
                 <VStack
-                    width='50%'
+                    width='45%'
                     align='center'
                     spacing='20px'
                     justify='center'
                 >
                     <Text
-                        color='rgba(0,0,0.0.4)'
-                        fontSize='15px'
+                        color='#000'
+                        fontSize='17px'
+                        fontWeight={500}
+                        fontFamily='Poppins'
                         textAlign='center'
                     >'Love the Simplicity of the service and the prompt customer support. We can't imagine working without it.'</Text>
-                    <Image />
+                        <Avatar size='lg' name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />{' '}
                     <VStack
-                        spacing='-10px'
+                        spacing='-3px'
                     >
                         <Text
                             color='#000'
