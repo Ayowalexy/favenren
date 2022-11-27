@@ -2,6 +2,7 @@ import AuthLayout from '../../public/components/AuthLayout'
 import { Text, Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Image, Box } from "@chakra-ui/react";
 import { AiFillEye, AiFillEyeInvisible, AiFillAccountBook } from 'react-icons/ai'
 import { useState } from "react";
+import { useRouter } from 'next/router';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { CheckboxIcon } from '@chakra-ui/react';
@@ -12,7 +13,8 @@ import Link from 'next/link';
 
 const Login = () => {
     const [value, setValue] = useState();
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(false);
+    const router = useRouter();
 
     return (
         <AuthLayout>
@@ -117,6 +119,7 @@ const Login = () => {
                     color='#fff'
                     fontSize='20px'
                     fontWeight={400}
+                    onClick={() => router.push('/dashboard')}
                     width='100%' height='60px' borderRadius='10px' backgroundColor='#69ACD1' border='none'
                 >Login</Button>
                 <HStack spacing='10px' justify='center' align='center'>
