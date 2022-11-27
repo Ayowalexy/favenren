@@ -21,7 +21,9 @@ const ForgotPassword = () => {
                 align='center'
                 justify='center'
                 backgroundColor='#fff'
-                width='550px'
+                width={{
+                    base: '90%', md: '550px', lg: '550px'
+                }}
                 height='500px'
                 borderRadius='15px'
             >
@@ -36,6 +38,7 @@ const ForgotPassword = () => {
                 <Text
                     color='#000'
                     fontSize='14px'
+                    textAlign='center'
                     fontWeight={400}
                     fontFamily='Poppins'
                 >
@@ -45,7 +48,9 @@ const ForgotPassword = () => {
                 <VStack
                     spacing='5px'
                     align='flex-start'
-                    width='80%'
+                    width={{
+                        base: '90%', md: '80%', lg: '80%'
+                    }}
                     paddingTop='20px'
                     paddingBottom='40px'
                 >
@@ -90,7 +95,10 @@ const ForgotPassword = () => {
                     fontSize='16px'
                     fontWeight={700}
                     onClick={() => router.push('/Auth/otp')}
-                    width='80%' height='60px' borderRadius='10px' backgroundColor='#69ACD1' border='none'
+                    width={{
+                        base: '90%', md: '80%', lg: '80%'
+                    }}
+                     height='60px' borderRadius='10px' backgroundColor='#69ACD1' border='none'
                 >Send Recovery text</Button>
 
                 <Link href='/Auth/login'>

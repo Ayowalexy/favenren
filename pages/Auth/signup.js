@@ -22,7 +22,9 @@ const Signup = () => {
     return (
         <AuthLayout>
             <VStack
-                width='60%'
+                width={{
+                    base: '90%', md: '60%', lg: '60%'
+                }}
                 spacing='30px'
                 align='center'
                 justify='center'

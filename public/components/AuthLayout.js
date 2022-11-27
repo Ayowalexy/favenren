@@ -1,7 +1,8 @@
 import {
     Text,
     Avatar,
-    Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Image, Box
+    Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Image, Box,
+    useMediaQuery
 } from "@chakra-ui/react";
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 import { useState } from "react";
@@ -12,6 +13,8 @@ import PhoneInput from 'react-phone-number-input'
 
 const AuthLayout = ({ children }) => {
 
+    const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
+
     return (
         <HStack
             align='center'
@@ -21,7 +24,9 @@ const AuthLayout = ({ children }) => {
             backgroundColor='#fff'
         >
             <VStack
-                width='50%'
+                width={{
+                    base: '100%', md: '100%', lg: '50%'
+                }}
                 align='center'
                 justify='center'
                 height='100vh'
@@ -31,45 +36,47 @@ const AuthLayout = ({ children }) => {
             >
                 {children}
             </VStack>
-            <VStack
-                height='100vh'
-                width='50%'
-                align='center'
-                spacing='20px'
-                justify='center'
-                backgroundColor='#F7F8F9'
-            >
+            {isLargerThan800 && (
                 <VStack
-                    width='45%'
+                    height='100vh'
+                    width='50%'
                     align='center'
                     spacing='20px'
                     justify='center'
+                    backgroundColor='#F7F8F9'
                 >
-                    <Text
-                        color='#000'
-                        fontSize='17px'
-                        fontWeight={500}
-                        fontFamily='Poppins'
-                        textAlign='center'
-                    >'Love the Simplicity of the service and the prompt customer support. We can't imagine working without it.'</Text>
-                        <Avatar size='lg' name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />{' '}
                     <VStack
-                        spacing='-3px'
+                        width='45%'
+                        align='center'
+                        spacing='20px'
+                        justify='center'
                     >
                         <Text
                             color='#000'
-                            fontWeight='bold'
-                            fontSize='15px'
+                            fontSize='17px'
+                            fontWeight={500}
+                            fontFamily='Poppins'
                             textAlign='center'
-                        >John Doe</Text>
-                        <Text
-                            color='rgba(0,0,0, 0.4)'
-                            fontSize='15px'
-                            textAlign='center'
-                        >CEO and founder of Example.com</Text>
+                        >'Love the Simplicity of the service and the prompt customer support. We can't imagine working without it.'</Text>
+                        <Avatar size='lg' name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />{' '}
+                        <VStack
+                            spacing='-3px'
+                        >
+                            <Text
+                                color='#000'
+                                fontWeight='bold'
+                                fontSize='15px'
+                                textAlign='center'
+                            >John Doe</Text>
+                            <Text
+                                color='rgba(0,0,0, 0.4)'
+                                fontSize='15px'
+                                textAlign='center'
+                            >CEO and founder of Example.com</Text>
+                        </VStack>
                     </VStack>
                 </VStack>
-            </VStack>
+            )}
 
         </HStack>
     )
