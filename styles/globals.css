@@ -5,6 +5,9 @@ body {
   padding: 0;
   margin: 0;
   font-family: 'Poppins', sans-serif;
+  -webkit-margin-start: 0rem !important;
+  
+  margin-inline-start: 0rem !important;
 }
 
 a {
@@ -48,5 +51,7 @@ a {
   body {
     color: white;
     background: black;
+    -webkit-margin-start: 0rem !important;
+    margin-inline-start: 0rem !important;
   }
 }

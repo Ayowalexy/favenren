@@ -7,11 +7,30 @@ const Actions = () => {
             justify='center'
             align='center'
             gap='20px'
+            // border='1px solid red'
             flexWrap='wrap'
+            marginInlineStart={0}
         >
+            <HStack
+                width='100%'
+                justify='flex-start'
+                align='center'
+            >
+                <Text
+                    color='#000'
+                    fontSize='12px'
+                    textAlign='left'
+                    justify='flex-start'
+                    alignSelf='flex-start'
+                    fontWeight={500}
+                    fontFamily='Poppins'
+                >
+                    Quick Actions
+                </Text>
+            </HStack>
             <VStack
                 spacing='0px'
-                width='48%'
+                width={{ base: '100%', md: '46%', lg: '48%' }}
                 height='120px'
                 borderRadius='15px'
                 align='flex-start'
@@ -33,11 +52,13 @@ const Actions = () => {
             </VStack>
             <VStack
                 spacing='0px'
-                width='48%'
+                width={{ base: '100%', md: '46%', lg: '48%' }}
                 height='120px'
                 borderRadius='15px'
                 align='flex-start'
                 padding='30px'
+                boxSizing='border-box'
+                marginInlineStart={0}
                 backgroundColor='#E6F2F6'
             >
                 <Text
@@ -45,7 +66,7 @@ const Actions = () => {
                     fontSize='17px'
                     fontWeight={500}
                     fontFamily='Poppins'
-                >Trade Gift Cards</Text>
+                >Trade Cryptocurrency</Text>
                 <Text
                     color='#000'
                     fontSize='14px'
@@ -56,10 +77,11 @@ const Actions = () => {
             <VStack
                 flexGrow={1}
                 spacing='0px'
-                width='48%'
+                width={{ base: '100%', md: '48%', lg: '48%' }}
                 height='120px'
                 borderRadius='15px'
                 align='flex-start'
+                marginInlineStart={0}
                 padding='30px'
                 backgroundColor='#E6F2F6'
             >
@@ -68,7 +90,7 @@ const Actions = () => {
                     fontSize='17px'
                     fontWeight={500}
                     fontFamily='Poppins'
-                >Trade Gift Cards</Text>
+                >Pay Bills, Buy Airtime & Data</Text>
                 <Text
                     color='#000'
                     fontSize='14px'

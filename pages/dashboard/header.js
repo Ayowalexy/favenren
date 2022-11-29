@@ -1,34 +1,39 @@
-import { Box, Text, HStack, VStack, useTheme } from "@chakra-ui/react";
-import {  RiShieldStarFill } from 'react-icons/ri'
+import { Box, Text, HStack, VStack, useTheme, Avatar, useMediaQuery } from "@chakra-ui/react";
+import { RiShieldStarFill } from 'react-icons/ri'
 
 
 const Header = () => {
     const theme = useTheme();
     const { primary, text, primary_faded } = theme.colors.brand
+    const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
+
 
     return (
         <HStack
             justify='space-between'
             width='100%'
         >
-            <VStack
-                spacing='0px'
-                align='flex-start'
-            >
-                <Text
-                    color='#000'
-                    fontSize='18px'
-                    fontWeight={600}
-                    fontFamily='Poppins'
-                >Good Morning Oluwatobi</Text>
-                <Text
-                    color={text}
-                    fontSize='13px'
-                    fontWeight={400}
-                    fontFamily='Poppins'
-                >Working Late</Text>
+            <HStack>
+                {!isLargerThan600 && <Avatar border={`1px solid ${primary}`} size='lg' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />}
+                <VStack
+                    spacing='0px'
+                    align='flex-start'
+                >
+                    <Text
+                        color='#000'
+                        fontSize='18px'
+                        fontWeight={600}
+                        fontFamily='Poppins'
+                    >Hello Oluwatobi</Text>
+                    <Text
+                        color={text}
+                        fontSize='13px'
+                        fontWeight={400}
+                        fontFamily='Poppins'
+                    >Working Late</Text>
 
-            </VStack>
+                </VStack>
+            </HStack>
             <HStack>
                 <RiShieldStarFill size={'35px'} fill={primary} />
                 <HStack

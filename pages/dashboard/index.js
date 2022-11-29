@@ -1,15 +1,19 @@
 import Layout from "../../public/components/Layout";
-import { Box, Divider} from "@chakra-ui/react";
+import { Box, Divider, useMediaQuery } from "@chakra-ui/react";
 import Wallet from "./wallet";
 import Slider from "./slider";
 import Actions from "./action";
 import Header from "./header";
 
 const Dashboard = () => {
+    const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
+
     return (
         <Layout>
             <Box
-                padding='45px 30px'
+                padding={{
+                    lg: '45px 30px', md: '45px 30px', base: '20px'
+                }}
             >
                 <Header />
                 <Wallet />

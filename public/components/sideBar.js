@@ -4,20 +4,35 @@ import {
     ListIcon,
     List,
     Avatar,
-    VStack
+    VStack,
+    useMediaQuery
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoIosArrowBack } from 'react-icons/io'
 import { useNavigation } from '../context/navigationContext'
 import { navigations } from "./navigations";
 
 const SideBar = () => {
     const { active, setActive } = useNavigation();
-    const [shrink, setShrink] = useState(false)
+    const [shrink, setShrink] = useState(false);
+    const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
+    const [isLesserThan1200] = useMediaQuery('(max-width: 1200px)')
+
+    useEffect(() => {
+        if(isLargerThan600 && isLesserThan1200){
+            setShrink(true)
+        }
+    }, [isLargerThan600, isLesserThan1200])
+
     return (
 
         <VStack
-            width={shrink ? '4%' : '18%'}
+            width={shrink 
+                ?  
+                isLargerThan600 && isLesserThan1200
+                    ? '7%'
+                    : '4%'
+                : '18%'}
             height='100vh'
             transition="all ease 500ms"
             backgroundColor='#fff'
@@ -26,16 +41,24 @@ const SideBar = () => {
         >
 
 
-            <HStack
-                onClick={() => setShrink(!shrink)}
-                justify='flex-end'
-                // marginTop='-100px'
-                padding='10px'
-                cursor='pointer'
-                width='100%'
-            >
-                <IoIosArrowBack fill="rgba(0,0,0,0.4)" size='20px' />
-            </HStack>
+            {
+                isLargerThan600 && isLesserThan1200 ?
+                    null
+                    : (
+                        (
+                            <HStack
+                                onClick={() => setShrink(!shrink)}
+                                justify='flex-end'
+                                // marginTop='-100px'
+                                padding='10px'
+                                cursor='pointer'
+                                width='100%'
+                            >
+                                <IoIosArrowBack fill="rgba(0,0,0,0.4)" size='20px' />
+                            </HStack>
+                        )
+                    )
+            }
             <List width='100%' pt={"80px"} spacing={1}>
 
                 {navigations.map((element, idx) => (
@@ -65,7 +88,7 @@ const SideBar = () => {
                             />
                             {!shrink && (
                                 <Text
-                                    
+
                                     fontStyle="normal"
                                     fontWeight={active === element.name ? 600 : 400}
                                     fontSize="16px"
