@@ -11,10 +11,12 @@ import { useState, useEffect } from "react";
 import { IoIosArrowBack } from 'react-icons/io'
 import { useNavigation } from '../context/navigationContext'
 import { navigations } from "./navigations";
+import { useRouter } from "next/router";
 
 const SideBar = () => {
     const { active, setActive } = useNavigation();
     const [shrink, setShrink] = useState(false);
+    const router = useRouter();
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
     const [isLesserThan1200] = useMediaQuery('(max-width: 1200px)')
 
@@ -72,7 +74,10 @@ const SideBar = () => {
                         transition="all ease 500ms"
                         padding="14px 13px"
                         key={idx}
-                        onClick={() => setActive(element.name)}
+                        onClick={() => {
+                            setActive(element.name)
+                            router.push(`/${element.route}`)
+                        }}
 
                     >
 

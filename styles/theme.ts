@@ -5,7 +5,9 @@ let colors = {
         text: '#63708C',
         primary: '#1EB0D9',
         primary_faded: '#E0EEF4',
-        wallet_bg: '#2C3341'
+        wallet_bg: '#2C3341',
+        text_2: '#2D3436',
+        box_bg: '#10B6E8'
     },
 
 

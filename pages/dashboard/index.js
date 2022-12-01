@@ -11,9 +11,9 @@ const Dashboard = () => {
     return (
         <Layout>
             <Box
-                padding={{
-                    lg: '45px 30px', md: '45px 30px', base: '20px'
-                }}
+               padding={{
+                lg: '45px 30px', md: '45px 30px', base: '20px'
+            }}
             >
                 <Header />
                 <Wallet />

@@ -18,24 +18,22 @@ const MobileMenu = ({ show, setShow }) => {
     const [hideBlur, setBlur] = useState(false);
     const initial = useRef(1)
 
-    useEffect(() => {
-        if (show) {
-            setTimeout(() => {
-                setBlur(true);
-            }, 300)
-        }
-    }, [show])
+    // useEffect(() => {
+    //     if (show) {
+    //         setTimeout(() => {
+    //             setBlur(true);
+    //         }, 300)
+    //     }
+    // }, [show])
 
-    useEffect(() => {
-        if (!hideBlur) {
-            setTimeout(() => {
-                setShow(!show)
-            }, 300)
+    // useEffect(() => {
+    //     if (!hideBlur) {
+    //         setTimeout(() => {
+    //             setShow(!show)
+    //         }, 300)
 
-        }
-    }, [hideBlur])
-
-    console.log(initial.current)
+    //     }
+    // }, [hideBlur])
 
     return (
         <>

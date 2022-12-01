@@ -12,11 +12,11 @@ export const navigations = [
         name: 'Dashboard'
     },
     {
-        route: '/dashboard',
+        route: '/trade-giftcard',
         icon: AiFillCreditCard,
         name: 'Trade Giftcard'
     },{
-        route: '/dashboard',
+        route: '/trade-crypto',
         icon: RiHandCoinFill,
         name: 'Trade Crypto'
     },{

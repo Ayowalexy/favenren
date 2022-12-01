@@ -28,6 +28,7 @@ const Layout = ({ children }) => {
                 backgroundColor='#F7F8F9'
                 flexGrow={1}
                 overflow='scroll'
+                
             >
                 {
                     !isLargerThan600 && (
