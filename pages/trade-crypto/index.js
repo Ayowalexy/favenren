@@ -1,12 +1,13 @@
 import { Box, Text, HStack, VStack, useTheme, Image, Select, Input, Button } from "@chakra-ui/react";
 import Layout from "../../public/components/Layout";
 import { useState } from "react";
-
+import { useRouter } from "next/router";
 
 const TradeCrypto = () => {
     const theme = useTheme();
     const [selected, setSelected] = useState("Bitcoin")
-    const { text_2 } = theme.colors.brand
+    const { text_2 } = theme.colors.brand;
+    const router = useRouter()
     return (
         <Layout>
             <Box
@@ -234,7 +235,7 @@ const TradeCrypto = () => {
                         color='#fff'
                         backgroundColor='#1EB0D9'
                         height='56px'
-
+                        onClick={() => router.push(`/trade-crypto/${selected.toLowerCase()}`)}
                         width={{ base: '100%', md: '300px', lg: '300px' }}
                     >
                         Proceed

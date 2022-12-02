@@ -20,15 +20,15 @@ export const navigations = [
         icon: RiHandCoinFill,
         name: 'Trade Crypto'
     },{
-        route: '/dashboard',
+        route: '/transactions',
         icon: IoNewspaperSharp,
         name: 'Transactions'
     },{
-        route: '/dashboard',
+        route: '/rate-checker',
         icon: RiExchangeFill,
         name: 'Rate Checker'
     },{
-        route: '/dashboard',
+        route: '/help-desk',
         icon: RiCustomerService2Fill,
         name: 'Help Desk'
     },{

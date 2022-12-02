@@ -17,6 +17,7 @@ const TradeCard = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isSuccessOpen, setIsSuccessOpen] = useState(false);
 
+
     const router = useRouter();
 
     useEffect(() => {
@@ -371,6 +372,7 @@ const TradeCard = () => {
 
             <ConfirmModal isOpen={isOpen} setIsOpen={setIsOpen} setIsSuccessOpen={setIsSuccessOpen} isSuccessOpen={isSuccessOpen} />
             <SuccessModal isOpen={isSuccessOpen} setIsOpen={setIsSuccessOpen} />
+       
         </Layout >
     )
 }
