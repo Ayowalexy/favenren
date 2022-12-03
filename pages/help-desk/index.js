@@ -194,6 +194,7 @@ const HelpDesk = () => {
                         width='100%'
                         align='center'
                         justify='space-between'
+                        flexDir={{base: 'column', md: 'row', lg: 'row'}}
                     >
                         <VStack
                             align='flex-start'
