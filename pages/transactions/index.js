@@ -59,6 +59,7 @@ const Transactions = () => {
                     <HStack
                         justify='space-between'
                         width='100%'
+                        flexWrap='wrap'
                     >
                         <Text
 
@@ -92,7 +93,7 @@ const Transactions = () => {
                                     color='#B2BEC3'
                                     placeholder="Search"
                                     height='40px'
-                                    width='240px'
+                                    width={{lg: '240px', md: '240px', base: '150px'}}
                                     borderRadius='10px'
                                     border='1px solid #DFE6E9'
                                 />

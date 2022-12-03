@@ -36,7 +36,7 @@ export const navigations = [
         icon: BsPersonFill,
         name: 'Account'
     },{
-        route: '/dashboard',
+        route: '/',
         icon: RiLogoutCircleFill,
         name: 'Logout'
     },

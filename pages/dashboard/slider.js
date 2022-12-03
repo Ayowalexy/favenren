@@ -12,6 +12,12 @@ const Slider = () => {
             paddingLeft='20px'
             justify='center'
             backgroundColor='#1D4079'
+            bgSize='cover'
+            backgroundRepeat='no-repeat'
+            bgPos='right'
+            bgImage={{
+                base: 'url("/images/img/img4.png")'
+            }}
         >
             <Text
                 color='#fff'

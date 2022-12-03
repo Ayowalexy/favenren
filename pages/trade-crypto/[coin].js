@@ -57,21 +57,25 @@ const TradeCoin = () => {
                     marginTop='40px'
                     spacing='30px'
                     padding={{ base: "60px 20px", lg: '60px 40px', md: '60px 40px' }}
-                    width={{ md: '80%', lg: '80%', base: '100%' }}
+                    width={{ md: '100%', lg: '80%', base: '100%' }}
                     borderRadius='7px'
                     backgroundColor='#FFFFFF'
                     border='1px solid #DFE6E9'
                 >
                     <HStack
                         gap='30px'
+                        width={{base: '100%'}}
                         align='flex-start'
+                        flexDir={{md: 'column', base: 'column', lg: 'row'}}
                     >
                         <HStack
-                            height='400px'
-                            width='400px'
+                            height={'fit-content'}
+                            // height={{base: '300px', lg: '400px', md: '400px'}}
+                            width={{base: '100%', lg: '400px', md: '400px'}}
                             borderRadius='10px'
                             align='center'
                             justify='center'
+                            padding={{base: '10px'}}
                             border={`1px solid ${btn}`}
                         >
                             <QRCode
@@ -82,13 +86,14 @@ const TradeCoin = () => {
                             />
                         </HStack>
                         <VStack
+                            width={{base: '100%'}}
                             align='flex-start'
                         >
                             <Text
                                 color={'#000'}
                                 fontSize={'24px'}
                                 fontWeight={500}
-                                width='400px'
+                                width={{lg: '400px', md: '400px', base: '100%'}}
                             >
                                 1wertvybunimokljhgfcdxrctfyuikmljnbhgfctyguhi1wertvybunimokljhgfcdxrctfyuikmljnbhgfctyguhi
                             </Text>
@@ -120,7 +125,7 @@ const TradeCoin = () => {
                         fontWeight={400}
                         pt='10px'
                         lineHeight='28px'
-                        width='750px'
+                        width={{lg: '750px', md: '90%'}}
                     >
                         To complete this transaction, you are to send the sum of 0.000023432BTC to the bitcoin address above. You can click on the button abbove to copy the wallet address or scan the QR code. Upload the payment proof below as soon as done to confirm this transaction.
                     </Text>

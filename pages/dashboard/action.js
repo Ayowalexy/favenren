@@ -1,4 +1,4 @@
-import { Box, Text, HStack, VStack } from "@chakra-ui/react";
+import { Box, Text, HStack, VStack, Image } from "@chakra-ui/react";
 
 const Actions = () => {
     return (
@@ -36,18 +36,26 @@ const Actions = () => {
                 align='flex-start'
                 padding='30px'
                 backgroundColor='#E6F2F6'
+                bgSize='contain'
+                backgroundRepeat='no-repeat'
+                bgPos='right'
+                bgImage={{
+                    base: 'url("/images/img/img1.png")'
+                }}
             >
                 <Text
                     color='#3D7D98'
                     fontSize='17px'
                     fontWeight={500}
                     fontFamily='Poppins'
+                    width={{base: '80%'}}
                 >Trade Gift Cards</Text>
                 <Text
                     color='#000'
                     fontSize='14px'
                     fontWeight={400}
                     fontFamily='Poppins'
+                    width={{base: '80%'}}
                 >Sell your Gift cards at market leading rates</Text>
             </VStack>
             <VStack
@@ -60,18 +68,26 @@ const Actions = () => {
                 boxSizing='border-box'
                 marginInlineStart={0}
                 backgroundColor='#E6F2F6'
+                bgSize='contain'
+                backgroundRepeat='no-repeat'
+                bgPos='right'
+                bgImage={{
+                    base: 'url("/images/img/img2.png")'
+                }}
             >
                 <Text
                     color='#3D7D98'
                     fontSize='17px'
                     fontWeight={500}
                     fontFamily='Poppins'
+                    width={{base: '80%'}}
                 >Trade Cryptocurrency</Text>
                 <Text
                     color='#000'
                     fontSize='14px'
                     fontWeight={400}
                     fontFamily='Poppins'
+                    width={{base: '80%'}}
                 >Sell your Gift cards at market leading rates</Text>
             </VStack>
             <VStack
@@ -84,18 +100,26 @@ const Actions = () => {
                 marginInlineStart={0}
                 padding='30px'
                 backgroundColor='#E6F2F6'
+                bgSize='contain'
+                backgroundRepeat='no-repeat'
+                bgPos='right'
+                bgImage={{
+                    base: 'url("/images/img/img3.png")'
+                }}
             >
                 <Text
                     color='#3D7D98'
                     fontSize='17px'
                     fontWeight={500}
                     fontFamily='Poppins'
+                    // width={{base: '80%'}}
                 >Pay Bills, Buy Airtime & Data</Text>
                 <Text
                     color='#000'
                     fontSize='14px'
                     fontWeight={400}
                     fontFamily='Poppins'
+                    width={{base: '80%'}}
                 >Sell your Gift cards at market leading rates</Text>
             </VStack>
         </HStack>

@@ -1,4 +1,4 @@
-import { Flex, VStack, Text, Button, HStack, Box, useMediaQuery } from "@chakra-ui/react";
+import { Flex, VStack, Text, Button, HStack, Box, useMediaQuery, Image } from "@chakra-ui/react";
 import OtpInput from 'react-otp-input';
 import { useState } from "react";
 import { BiTime } from 'react-icons/bi'
@@ -19,6 +19,7 @@ const OTP = () => {
             paddingTop='90px'
 
         >
+            <Image src='/images/svg/logo.svg' />
             <Text
                 color='#000'
                 fontSize='16px'

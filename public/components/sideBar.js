@@ -5,7 +5,8 @@ import {
     List,
     Avatar,
     VStack,
-    useMediaQuery
+    useMediaQuery,
+    Image
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { IoIosArrowBack } from 'react-icons/io'
@@ -21,7 +22,7 @@ const SideBar = () => {
     const [isLesserThan1200] = useMediaQuery('(max-width: 1200px)')
 
     useEffect(() => {
-        if(isLargerThan600 && isLesserThan1200){
+        if (isLargerThan600 && isLesserThan1200) {
             setShrink(true)
         }
     }, [isLargerThan600, isLesserThan1200])
@@ -29,8 +30,8 @@ const SideBar = () => {
     return (
 
         <VStack
-            width={shrink 
-                ?  
+            width={shrink
+                ?
                 isLargerThan600 && isLesserThan1200
                     ? '7%'
                     : '4%'
@@ -61,7 +62,13 @@ const SideBar = () => {
                         )
                     )
             }
-            <List width='100%' pt={"80px"} spacing={1}>
+            {
+                isLargerThan600 && !shrink && <HStack width='100%' justify='center' align='center'>
+                    <Image src='/images/svg/logo.svg' />
+                </HStack>
+            }
+
+            <List width='100%' pt={"50px"} spacing={1}>
 
                 {navigations.map((element, idx) => (
                     <ListItem

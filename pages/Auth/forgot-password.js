@@ -1,4 +1,4 @@
-import { Flex, HStack, VStack, Text, Button } from "@chakra-ui/react";
+import { Flex, HStack, VStack, Text, Button, Image } from "@chakra-ui/react";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import Link from "next/link";
@@ -27,10 +27,12 @@ const ForgotPassword = () => {
                 height='500px'
                 borderRadius='15px'
             >
+                <Image src="/images/svg/logo.svg" />
                 <Text
                     color='#000'
                     fontSize='20px'
                     fontWeight={700}
+                    paddingTop="10px"
                     fontFamily='Poppins'
                 >
                     Recover password

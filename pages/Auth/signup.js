@@ -1,5 +1,5 @@
 import AuthLayout from '../../public/components/AuthLayout'
-import { Text, Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Checkbox } from "@chakra-ui/react";
+import { Text, Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Checkbox, Image } from "@chakra-ui/react";
 import { AiFillEye, AiFillEyeInvisible, AiFillInfoCircle } from 'react-icons/ai'
 import { useState } from "react";
 import PhoneInput from 'react-phone-input-2'
@@ -31,12 +31,13 @@ const Signup = () => {
                 marginBottom='100px'
                 height='fit-content'
             >
+                <Image src='/images/svg/logo.svg' paddingTop='700px'/>
                 <Text
                     color='#000'
                     fontSize='20px'
                     fontWeight={700}
                     fontFamily='Poppins'
-                    paddingTop='600px'
+                    
                    
                 >
                     Create an account, it's free

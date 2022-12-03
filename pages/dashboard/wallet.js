@@ -20,6 +20,12 @@ const Wallet = () => {
                 borderRadius='15px'
                 padding={{ base: '0px 20px', lg: '0px 50px', md: '0px 50px' }}
                 backgroundColor={wallet_bg}
+                bgSize='contain'
+                // backgroundRepeat='no-repeat'
+                bgPos='right'
+                bgImage={{
+                    base: 'url("/images/img/img5.png")'
+                }}
             >
                 <VStack>
                     <VStack

@@ -26,6 +26,7 @@ const Login = () => {
                 align='center'
                 justify='center'
             >
+                <Image src='/images/svg/logo.svg' />
                 <Text
                     color='#000'
                     fontSize='20px'
