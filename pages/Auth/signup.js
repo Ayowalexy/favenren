@@ -312,7 +312,7 @@ const Signup = () => {
                     color='#fff'
                     fontSize='20px'
                     fontWeight={400}
-                    width='100%' height='60px' borderRadius='10px' backgroundColor='#69ACD1' border='none'
+                    width='100%' height='60px' borderRadius='10px' backgroundColor='#1EB0D9' border='none'
                 >Login</Button>
                 <HStack spacing='10px' justify='center' align='center'>
                     <Text

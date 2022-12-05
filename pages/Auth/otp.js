@@ -59,7 +59,7 @@ const OTP = () => {
                     base: '90%',
                     md: '440px',
                     lg: '440px'
-                }} height='60px' borderRadius='10px' backgroundColor='#69ACD1' border='none'
+                }} height='60px' borderRadius='10px' backgroundColor='#1EB0D9' border='none'
             >Verify OTP</Button>
 
             <HStack

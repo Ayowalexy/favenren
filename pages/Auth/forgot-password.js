@@ -100,7 +100,7 @@ const ForgotPassword = () => {
                     width={{
                         base: '90%', md: '80%', lg: '80%'
                     }}
-                     height='60px' borderRadius='10px' backgroundColor='#69ACD1' border='none'
+                     height='60px' borderRadius='10px' backgroundColor='#1EB0D9' border='none'
                 >Send Recovery text</Button>
 
                 <Link href='/Auth/login'>

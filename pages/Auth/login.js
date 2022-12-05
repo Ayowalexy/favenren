@@ -4,7 +4,6 @@ import { AiFillEye, AiFillEyeInvisible, AiFillAccountBook } from 'react-icons/ai
 import { useState } from "react";
 import { useRouter } from 'next/router';
 import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
 import { CheckboxIcon } from '@chakra-ui/react';
 
 import Link from 'next/link';
@@ -121,7 +120,7 @@ const Login = () => {
                     fontSize='20px'
                     fontWeight={400}
                     onClick={() => router.push('/dashboard')}
-                    width='100%' height='60px' borderRadius='10px' backgroundColor='#69ACD1' border='none'
+                    width='100%' height='60px' borderRadius='10px' backgroundColor='#1EB0D9' border='none'
                 >Login</Button>
                 <HStack spacing='10px' justify='center' align='center'>
                     <Text
