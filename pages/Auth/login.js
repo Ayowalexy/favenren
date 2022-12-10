@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from 'next/router';
 import PhoneInput from 'react-phone-input-2'
 import { CheckboxIcon } from '@chakra-ui/react';
+import 'react-phone-input-2/lib/style.css'
 
 import Link from 'next/link';
 

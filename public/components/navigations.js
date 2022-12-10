@@ -32,7 +32,7 @@ export const navigations = [
         icon: RiCustomerService2Fill,
         name: 'Help Desk'
     },{
-        route: '/dashboard',
+        route: '/account',
         icon: BsPersonFill,
         name: 'Account'
     },{
