@@ -1,13 +1,26 @@
 import { Box, Text, HStack, VStack, useTheme, Image, Select, Input, Button } from "@chakra-ui/react";
 import Layout from "../../public/components/Layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../public/redux/store";
+import { Preloader } from "../Auth/otp";
+import { getCard } from "../../public/redux/reducers/cards/thunkAction";
 
 const TradeCrypto = () => {
     const theme = useTheme();
     const [selected, setSelected] = useState("Bitcoin")
     const { text_2 } = theme.colors.brand;
-    const router = useRouter()
+    const router = useRouter();
+    const dispatch = useDispatch();
+
+    const { cards, loading } = useAppSelector(
+        ({ cardReducer }) => cardReducer
+    )
+
+    
+
+
     return (
         <Layout>
             <Box

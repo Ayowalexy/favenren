@@ -1,20 +1,70 @@
 import AuthLayout from '../../public/components/AuthLayout'
-import { Text, Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Image, Box } from "@chakra-ui/react";
+import { Text, Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Image, Box, FormControl, FormErrorMessage, } from "@chakra-ui/react";
 import { AiFillEye, AiFillEyeInvisible, AiFillAccountBook } from 'react-icons/ai'
 import { useState } from "react";
 import { useRouter } from 'next/router';
 import PhoneInput from 'react-phone-input-2'
 import { CheckboxIcon } from '@chakra-ui/react';
 import 'react-phone-input-2/lib/style.css'
-
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../public/redux/store';
+import { login } from '../../public/redux/reducers/auth/thunkAction';
+import * as Yup from 'yup'
+import { useFormik } from 'formik';
 import Link from 'next/link';
+import { useToast } from '@chakra-ui/react';
+
+const validationSchema = Yup.object().shape({
+    email: Yup.string().email().required('Email'),
+    password: Yup.string().required('Password is required')
+})
 
 
 
 const Login = () => {
     const [value, setValue] = useState();
     const [show, setShow] = useState(false);
+    const dispatch = useDispatch();
+    const toast = useToast();
     const router = useRouter();
+
+
+    const { loading } = useAppSelector(
+        ({ authReducer }) => authReducer
+    )
+
+    const {
+        handleSubmit,
+        handleChange,
+        handleBlur,
+        setFieldValue,
+        isSubmitting,
+        errors,
+        touched,
+    } = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        validationSchema,
+        onSubmit: async (values) => {
+            await dispatch(login(values)).then(res => {
+                console.log(values)
+                if (res.meta.requestStatus === 'fulfilled') {
+                    toast({
+                        title: 'Login success.',
+                        description: "Welcome back",
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                        position: 'top-right'
+                    })
+                    router.push('/dashboard')
+                }
+            })
+        },
+    });
+
 
     return (
         <AuthLayout>
@@ -36,47 +86,47 @@ const Login = () => {
                     Welcome back, Sign in.
                 </Text>
 
-                <VStack
-                    spacing='5px'
-                    align='flex-start'
-                    width='100%'
+                <FormControl
+                    isInvalid={!!errors.email && touched.email}
                 >
-                    <Text
-                        fontSize='16px'
-                        color='#000'
-                        fontWeight={500}
-                        fontFamily='Poppins'
-                    >Phone number</Text>
-                    <PhoneInput
-                        containerStyle={{
-                            border: '1px solid rgba(0,0,0,0.1)',
-                            borderRadius: '10px'
-                        }}
-                        inputStyle={{
-                            color: 'rgba(0,0,0,5)',
-                            fontWeight: 'bold',
-                            fontSize: '15px',
-                            paddingLeft: '80px',
-                            width: '100%',
-                            height: '60px',
-                            borderRadius: '10px',
-                            backgroundColor: '#F7F8F9',
-                            border: 'none'
-                        }}
-                        country={'ng'}
-                        value={value}
-                        placeholder='8X XXX XXXX'
-                        onChange={phone => setValue(phone)}
-                        buttonStyle={{
-                            width: '70px',
-                            border: 'none',
-                            paddingLeft: '15px'
-                        }}
-                    />
+                    <VStack
+                        spacing='5px'
+                        align='flex-start'
+                        width='100%'
+                    >
+                        <Text
+                            fontSize='16px'
+                            color='#000'
+                            fontWeight={500}
+                            fontFamily='Poppins'
+                        >Email Address</Text>
+                        <Input
+                            color='rgba(0,0,0,5)'
+                            fontWeight={500}
+                            fontSize='15px'
+                            paddingLeft='20px'
+                            name='email'
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            placeholder='youremail@gmail.com'
+                            width='100%'
+                            height='60px'
+                            borderRadius='10px'
+                            backgroundColor='#F7F8F9'
+                            border='1px solid rgba(0,0,0,0.4)'
+                        />
 
+                    </VStack>
+                    <FormErrorMessage
+                        color={"red"}
+                        alignSelf="flex-start" fontSize={14}>
+                        {errors.email}
+                    </FormErrorMessage>
+                </FormControl>
 
-                </VStack>
-
+                <FormControl
+                    isInvalid={!!errors.password && touched.password}
+                >
                 <VStack
                     spacing='5px'
                     align='flex-start'
@@ -94,10 +144,13 @@ const Login = () => {
                             fontWeight='bold'
                             fontSize='15px'
                             paddingLeft='20px'
+                            name='password'
                             type={show ? 'text' : 'password'}
                             placeholder='Your password'
                             width='100%'
                             height='60px'
+                            onBlur={handleBlur}
+                            onChange={handleChange}
                             borderRadius='10px'
                             backgroundColor='#F7F8F9'
                             border='1px solid rgba(0,0,0,0.4)'
@@ -110,7 +163,14 @@ const Login = () => {
 
                 </VStack>
 
-                <HStack  alignSelf='flex-end'>
+                <FormErrorMessage
+                        color={"red"}
+                        alignSelf="flex-start" fontSize={14}>
+                        {errors.password}
+                    </FormErrorMessage>
+                </FormControl>
+
+                <HStack alignSelf='flex-end'>
                     <Link href='/Auth/forgot-password'>
                         <Text fontFamily='Poppins' textAlign='left' fontWeight={500} padding='10px 0px' color='#69ACD1'>Forgot Password</Text>
                     </Link>
@@ -120,7 +180,8 @@ const Login = () => {
                     color='#fff'
                     fontSize='20px'
                     fontWeight={400}
-                    onClick={() => router.push('/dashboard')}
+                    isLoading={loading === 'pending' ? true : false}
+                    onClick={handleSubmit}
                     width='100%' height='60px' borderRadius='10px' backgroundColor='#1EB0D9' border='none'
                 >Login</Button>
                 <HStack spacing='10px' justify='center' align='center'>

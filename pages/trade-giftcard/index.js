@@ -3,10 +3,17 @@ import { Box, Text, VStack, HStack, useTheme, Input, InputGroup, Image, InputRig
 import { useRouter } from "next/router";
 import { BsSearch } from 'react-icons/bs'
 import { useNavigation } from "../../public/context/navigationContext";
+import { Preloader } from "../Auth/otp";
+import { useAppSelector } from "../../public/redux/store";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getCard } from "../../public/redux/reducers/cards/thunkAction";
 
 const Card = ({ img, name }) => {
     const router = useRouter();
-    const { setActive } = useNavigation()
+    const { setActive } = useNavigation();
+    
+
     return (
         <Flex
             onClick={() => {
@@ -50,6 +57,18 @@ const GiftCard = () => {
     const theme = useTheme();
     const { text_2, box_bg } = theme.colors.brand;
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
+
+    const dispatch = useDispatch();
+
+    const { cards, loading } = useAppSelector(
+        ({ cardReducer }) => cardReducer
+    )
+
+    useEffect(() => {
+        dispatch(getCard())
+    }, [])
+
+    console.log('cards', cards)
 
     return (
         <Layout>
@@ -131,6 +150,8 @@ const GiftCard = () => {
                     }
                 </VStack>
 
+                { loading === 'pending' && <Preloader />}
+
                 <HStack
                     spacing='30px'
                     align='center'
@@ -143,46 +164,12 @@ const GiftCard = () => {
                 >
                     <Box flexWrap='wrap' gap='20px' display='flex' justify='space-between' align='center'>
                         {
-                            [
-                                {
-                                    img: '/images/img/amazon.png',
-                                    name: 'Amazon Prime'
-                                }, {
-                                    img: '/images/img/steam.png',
-                                    name: 'Steam'
-                                }, {
-                                    img: '/images/img/ps.png',
-                                    name: 'PlayStation'
-                                }, {
-                                    img: '/images/img/spotify.png',
-                                    name: 'Spotify'
-                                }, {
-                                    img: '/images/img/amazon.png',
-                                    name: 'Amazon Prime'
-                                }, {
-                                    img: '/images/img/steam.png',
-                                    name: 'Steam'
-                                }, {
-                                    img: '/images/img/ps.png',
-                                    name: 'PlayStation'
-                                }, {
-                                    img: '/images/img/spotify.png',
-                                    name: 'Spotify'
-                                }, {
-                                    img: '/images/img/amazon.png',
-                                    name: 'Amazon Prime'
-                                }, {
-                                    img: '/images/img/steam.png',
-                                    name: 'Steam'
-                                }, {
-                                    img: '/images/img/ps.png',
-                                    name: 'PlayStation'
-                                }, {
-                                    img: '/images/img/spotify.png',
-                                    name: 'Spotify'
-                                },
-                            ].map((element) => (
-                                <Card key={element.img.concat(Math.random().toString())} img={element.img} name={element.name} />
+                            cards.map((element) => (
+                                <Card 
+                                    key={element.id} 
+                                    name={element.title}
+                                    img={element.image} 
+                                />
                             ))
                         }
                     </Box>

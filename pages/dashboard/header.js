@@ -1,12 +1,16 @@
 import { Box, Text, HStack, VStack, useTheme, Avatar, useMediaQuery } from "@chakra-ui/react";
 import { RiShieldStarFill } from 'react-icons/ri'
+import { useAppSelector } from "../../public/redux/store";
 
 
 const Header = () => {
     const theme = useTheme();
     const { primary, text, primary_faded } = theme.colors.brand
-    const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
+    const [isLargerThan600] = useMediaQuery('(min-width: 600px)');
 
+    const { user: { username} } = useAppSelector(
+        ({ authReducer }) => authReducer
+    )
 
     return (
         <HStack
@@ -24,7 +28,7 @@ const Header = () => {
                         fontSize='18px'
                         fontWeight={600}
                         fontFamily='Poppins'
-                    >Hello Oluwatobi</Text>
+                    >Hello {username}</Text>
                     <Text
                         color={text}
                         fontSize='13px'

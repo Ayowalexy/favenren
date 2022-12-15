@@ -54,7 +54,7 @@ const Wallet = () => {
                                 showBalance
                                     ?
                                     <>
-                                        ₦540,000<span style={{ color: text, fontSize: '14px' }}>.00</span>
+                                        ₦0<span style={{ color: text, fontSize: '14px' }}>.00</span>
                                     </>
                                     :
                                     '* * * *'
