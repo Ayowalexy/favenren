@@ -111,9 +111,7 @@ export const checkreferer = createAsyncThunk(
       const response = await useAxios({
         url: `${config.API_BASE_URL}/check-referrer`,
         method: "post",
-        params: {
-          username
-        }
+        data: { username }
       });
       const authData = response.data.message;
     

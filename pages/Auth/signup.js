@@ -1,5 +1,5 @@
 import AuthLayout from '../../public/components/AuthLayout'
-import { Text, Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Checkbox, Image, Box, FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react";
+import { Text, Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Checkbox, Image, Box, FormControl, FormLabel, FormErrorMessage, theme } from "@chakra-ui/react";
 import { AiFillEye, AiFillEyeInvisible, AiFillInfoCircle } from 'react-icons/ai'
 import { useEffect, useState } from "react";
 import PhoneInput from 'react-phone-input-2'
@@ -12,17 +12,49 @@ import { BsCheckCircleFill } from 'react-icons/bs';
 import { MdCancel } from 'react-icons/md';
 import SyncLoader from "react-spinners/SyncLoader";
 import { useAppSelector } from '../../public/redux/store'
-import { useFormik } from 'formik';
+import { useFormik, Field } from 'formik';
 import * as Yup from 'yup';
 import { useToast } from '@chakra-ui/react';
 import { useUser } from '../../public/context/userContext'
 import { useRouter } from 'next/router';
 
-
 import Link from 'next/link';
 
+
+Yup.addMethod(Yup.string, "nameTypeSpace", function (errorMessage) {
+    return this.test(`fullname-space`, errorMessage, function (value) {
+        const { path, createError } = this;
+        return (
+            (value && value.trim().split(' ').length >= 2) ||
+            createError({ path, message: errorMessage })
+        );
+    });
+});
+
+
+Yup.addMethod(Yup.string, "nameTypeSLength", function (errorMessage) {
+    return this.test(`fullname-length`, errorMessage, function (value) {
+        const { path, createError } = this;
+
+        const firstName = value && value.trim().split(' ')[0] || '';
+        const lastName = value && value.trim().split(' ')[1] || '';
+
+        console.log(firstName.length, lastName.length)
+
+        return (
+            (firstName.length >= 3 && lastName.length >= 3) ||
+            createError({ path, message: errorMessage })
+        );
+    });
+});
+
+
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
+    name: Yup
+        .string()
+        .nameTypeSpace('No space between your names')
+        .nameTypeSLength('Your names are invalid')
+        .required('Name is required'),
     phone: Yup.string().required('Enter phone number'),
     email: Yup.string().email().required('Email is required'),
     username: Yup.string().required('Enter username'),
@@ -69,6 +101,8 @@ const Signup = () => {
         handleSubmit,
         handleChange,
         handleBlur,
+        validateField,
+        setFieldError,
         setFieldValue,
         isSubmitting,
         errors,
@@ -101,6 +135,8 @@ const Signup = () => {
             })
         },
     });
+
+    console.log(message)
 
     return (
         <AuthLayout>
@@ -190,7 +226,9 @@ const Signup = () => {
 
 
                 <FormControl
-                    isInvalid={!!errors.username && touched.username}
+                    isInvalid={
+                        !!errors.username && touched.username
+                    }
                 >
                     <VStack
                         spacing='5px'
@@ -255,6 +293,11 @@ const Signup = () => {
                         alignSelf="flex-start" fontSize={14}>
                         {errors.username}
                     </FormErrorMessage>
+                    <Text
+                        color={message === 'Username is available' ? 'rgb(0,255,0)' : 'red'}
+                    >
+                        {!Boolean(errors.username) && message}
+                    </Text>
                 </FormControl>
 
                 <FormControl
@@ -384,9 +427,9 @@ const Signup = () => {
                                     {
                                         isCheckingRef === 'idle'
                                             ? <AiFillInfoCircle size='20px' fill='#65708A' />
-                                            : isCheckingRef === 'successful' && msg === 'User not found'
+                                            : isCheckingRef === 'successful' && msg === 'Referrer fetched sucessfully'
                                                 ? <BsCheckCircleFill size='20px' fill='rgb(0,255,0)' />
-                                                : isCheckingRef === 'successful' && msg !== 'User not found'
+                                                : isCheckingRef === 'successful' && msg !== 'Referrer fetched sucessfully'
                                                     ? <MdCancel size='20px' fill='rgb(255, 0,0)' />
                                                     : isCheckingRef === 'pending'
                                                         ? (
@@ -403,6 +446,12 @@ const Signup = () => {
                                 </Text>}
                         />
                     </InputGroup>
+
+                    <Text
+                        color={msg.toString().includes('sucessfully') ? 'rgb(0,255,0)' : 'red'}
+                    >
+                        {msg}
+                    </Text>
 
                 </VStack>
 

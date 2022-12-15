@@ -57,9 +57,9 @@ const authSlice = createSlice({
     builder.addCase(checksuername.fulfilled, (state, action) => {
       return { ...state, isChecking: "successful", message: action.payload };
     });
-    builder.addCase(checksuername.rejected, (state, action) => {
-      console.log(action.payload);
-      return { ...state, isChecking: "failed" };
+    builder.addCase(checksuername.rejected, (state, action: any) => {
+      const resData = action.payload[0] || 'Error occured'
+      return { ...state, isChecking: "failed", message: resData };
     });
 
     //signup
@@ -152,8 +152,10 @@ const authSlice = createSlice({
     builder.addCase(checkreferer.fulfilled, (state, action) => {
       return { ...state, isCheckingRef: "successful", msg: action.payload};
     });
-    builder.addCase(checkreferer.rejected, (state, action) => {
-      return { ...state, isCheckingRef: "failed" };
+    builder.addCase(checkreferer.rejected, (state, action: any) => {
+      const resData = action.payload || 'Error occured'
+
+      return { ...state, isCheckingRef: "failed", msg: resData};
     });
   },
 });
