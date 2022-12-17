@@ -7,7 +7,8 @@ import {
   sendOtp,
   forgotPassword,
   resetPassword,
-  checkreferer
+  checkreferer,
+  loginNofitication
 } from "./thunkAction";
 
 interface IState {
@@ -156,6 +157,18 @@ const authSlice = createSlice({
       const resData = action.payload || 'Error occured'
 
       return { ...state, isCheckingRef: "failed", msg: resData};
+    });
+
+    //notify login
+    builder.addCase(loginNofitication.pending, (state) => {
+      return { ...state, isCheckingRef: "pending" };
+    });
+
+    builder.addCase(loginNofitication.fulfilled, (state, action) => {
+      return { ...state, isCheckingRef: "successful",};
+    });
+    builder.addCase(loginNofitication.rejected, (state, action) => {
+      return { ...state, isCheckingRef: "failed" };
     });
   },
 });

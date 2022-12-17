@@ -68,8 +68,6 @@ const GiftCard = () => {
         dispatch(getCard())
     }, [])
 
-    console.log('cards', cards)
-
     return (
         <Layout>
             <Box

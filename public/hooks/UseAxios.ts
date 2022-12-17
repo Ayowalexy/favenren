@@ -20,6 +20,7 @@ const useAxios = async function apiRequest(
       authorization: `Bearer ${getToken()}`,
       // mode: "cors",
     },
+   
   });
   if (resp.status === 401) {
     console.log("clear");

@@ -1,18 +1,21 @@
 import AuthLayout from '../../public/components/AuthLayout'
 import { Text, Flex, HStack, VStack, InputGroup, Input, InputRightElement, Button, Image, Box, FormControl, FormErrorMessage, } from "@chakra-ui/react";
 import { AiFillEye, AiFillEyeInvisible, AiFillAccountBook } from 'react-icons/ai'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import PhoneInput from 'react-phone-input-2'
 import { CheckboxIcon } from '@chakra-ui/react';
 import 'react-phone-input-2/lib/style.css'
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../public/redux/store';
-import { login } from '../../public/redux/reducers/auth/thunkAction';
+import { login, loginNofitication } from '../../public/redux/reducers/auth/thunkAction';
 import * as Yup from 'yup'
 import { useFormik } from 'formik';
 import Link from 'next/link';
 import { useToast } from '@chakra-ui/react';
+import ip from 'ip'
+import DeviceDetector from "device-detector-js";
+
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email().required('Email'),
@@ -32,6 +35,23 @@ const Login = () => {
     const { loading } = useAppSelector(
         ({ authReducer }) => authReducer
     )
+
+
+    const handleSendLoginNotification = () => {
+        const deviceDetector = new DeviceDetector();
+        const agent = navigator.userAgent;
+        const device = deviceDetector.parse(agent);
+
+        const data = {
+            os: device?.os?.name,
+            time: new Date().toDateString(),
+            device: device?.client?.name,
+            ip: ip.address()
+        }
+
+        dispatch(loginNofitication(data))
+
+    }
 
     const {
         handleSubmit,
@@ -59,6 +79,7 @@ const Login = () => {
                         isClosable: true,
                         position: 'top-right'
                     })
+                    handleSendLoginNotification()
                     router.push('/dashboard')
                 }
             })
@@ -127,43 +148,43 @@ const Login = () => {
                 <FormControl
                     isInvalid={!!errors.password && touched.password}
                 >
-                <VStack
-                    spacing='5px'
-                    align='flex-start'
-                    width='100%'
-                >
-                    <Text
-                        fontSize='16px'
-                        color='#000'
-                        fontWeight={500}
-                        fontFamily='Poppins'
-                    >Password</Text>
-                    <InputGroup>
-                        <Input
-                            color='rgba(0,0,0,5)'
-                            fontWeight='bold'
-                            fontSize='15px'
-                            paddingLeft='20px'
-                            name='password'
-                            type={show ? 'text' : 'password'}
-                            placeholder='Your password'
-                            width='100%'
-                            height='60px'
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            borderRadius='10px'
-                            backgroundColor='#F7F8F9'
-                            border='1px solid rgba(0,0,0,0.4)'
-                        />
-                        <InputRightElement
-                            onClick={() => setShow(!show)} padding={'30px'}
-                            children={<Text>{show ? <AiFillEye size='20px' fill='#69ACD1' /> : <AiFillEyeInvisible size='20px' fill='#69ACD1' />}</Text>}
-                        />
-                    </InputGroup>
+                    <VStack
+                        spacing='5px'
+                        align='flex-start'
+                        width='100%'
+                    >
+                        <Text
+                            fontSize='16px'
+                            color='#000'
+                            fontWeight={500}
+                            fontFamily='Poppins'
+                        >Password</Text>
+                        <InputGroup>
+                            <Input
+                                color='rgba(0,0,0,5)'
+                                fontWeight='bold'
+                                fontSize='15px'
+                                paddingLeft='20px'
+                                name='password'
+                                type={show ? 'text' : 'password'}
+                                placeholder='Your password'
+                                width='100%'
+                                height='60px'
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                borderRadius='10px'
+                                backgroundColor='#F7F8F9'
+                                border='1px solid rgba(0,0,0,0.4)'
+                            />
+                            <InputRightElement
+                                onClick={() => setShow(!show)} padding={'30px'}
+                                children={<Text>{show ? <AiFillEye size='20px' fill='#69ACD1' /> : <AiFillEyeInvisible size='20px' fill='#69ACD1' />}</Text>}
+                            />
+                        </InputGroup>
 
-                </VStack>
+                    </VStack>
 
-                <FormErrorMessage
+                    <FormErrorMessage
                         color={"red"}
                         alignSelf="flex-start" fontSize={14}>
                         {errors.password}

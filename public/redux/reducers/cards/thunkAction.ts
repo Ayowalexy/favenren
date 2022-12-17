@@ -27,3 +27,48 @@ export const getCard = createAsyncThunk(
   }
 );
 
+
+
+export const getCryto = createAsyncThunk(
+  "card/getCypto",
+  async (data, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/cryptos`,
+        method: "get",
+      });
+
+      return response.data;
+    } catch (error) {
+
+      if (axios.isAxiosError(error) && error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);
+
+
+export const getWalletAddress = createAsyncThunk(
+  "card/getWalletAddress",
+  async (data, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/crypto-wallet-address`,
+        method: "post",
+        data: data
+      });
+
+      return response.data;
+    } catch (error) {
+
+      if (axios.isAxiosError(error) && error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);

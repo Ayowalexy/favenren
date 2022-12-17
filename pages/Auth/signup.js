@@ -39,8 +39,6 @@ Yup.addMethod(Yup.string, "nameTypeSLength", function (errorMessage) {
         const firstName = value && value.trim().split(' ')[0] || '';
         const lastName = value && value.trim().split(' ')[1] || '';
 
-        console.log(firstName.length, lastName.length)
-
         return (
             (firstName.length >= 3 && lastName.length >= 3) ||
             createError({ path, message: errorMessage })
