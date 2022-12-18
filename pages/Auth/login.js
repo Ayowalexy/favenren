@@ -8,7 +8,7 @@ import { CheckboxIcon } from '@chakra-ui/react';
 import 'react-phone-input-2/lib/style.css'
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../public/redux/store';
-import { login, loginNofitication } from '../../public/redux/reducers/auth/thunkAction';
+import { login, loginNofitication, getHomeData } from '../../public/redux/reducers/auth/thunkAction';
 import * as Yup from 'yup'
 import { useFormik } from 'formik';
 import Link from 'next/link';
@@ -68,20 +68,21 @@ const Login = () => {
         },
         validationSchema,
         onSubmit: async (values) => {
-            await dispatch(login(values)).then(res => {
-                console.log(values)
-                if (res.meta.requestStatus === 'fulfilled') {
-                    toast({
-                        title: 'Login success.',
-                        description: "Welcome back",
-                        status: 'success',
-                        duration: 3000,
-                        isClosable: true,
-                        position: 'top-right'
-                    })
-                    handleSendLoginNotification()
-                    router.push('/dashboard')
-                }
+            await dispatch(login(values)).then(async res => {
+                await dispatch(getHomeData()).then(res => {
+                    if (res.meta.requestStatus === 'fulfilled') {
+                        toast({
+                            title: 'Login success.',
+                            description: "Welcome back",
+                            status: 'success',
+                            duration: 3000,
+                            isClosable: true,
+                            position: 'top-right'
+                        })
+                        handleSendLoginNotification()
+                        router.push('/dashboard')
+                    }
+                })
             })
         },
     });

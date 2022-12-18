@@ -8,7 +8,8 @@ import {
   forgotPassword,
   resetPassword,
   checkreferer,
-  loginNofitication
+  loginNofitication,
+  getHomeData
 } from "./thunkAction";
 
 interface IState {
@@ -20,7 +21,12 @@ interface IState {
   otpMessage: string;
   isSending: "failed" | "pending" | "successful" | "idle";
   isCheckingRef: "failed" | "pending" | "successful" | "idle";
+  isLoadingHomeData: "failed" | "pending" | "successful" | "idle";
   msg: string;
+  services: [];
+  promotions: [];
+  reward_balance: string;
+  wallet_balance: string;
 
 
 }
@@ -39,7 +45,13 @@ const initialState: IState = {
   otpMessage: "",
   isSending: 'idle',
   isCheckingRef: "idle",
-  msg: ""
+  msg: "",
+  services: [],
+  promotions: [],
+  reward_balance: "",
+  wallet_balance: '',
+  isLoadingHomeData: 'idle'
+
 };
 
 // Then, handle actions in your reducers:ß
@@ -169,6 +181,20 @@ const authSlice = createSlice({
     });
     builder.addCase(loginNofitication.rejected, (state, action) => {
       return { ...state, isCheckingRef: "failed" };
+    });
+
+     //get home data
+     builder.addCase(getHomeData.pending, (state) => {
+      return { ...state, isLoadingHomeData: "pending" };
+    });
+
+    builder.addCase(getHomeData.fulfilled, (state, action) => {
+
+      const { services, promotions, wallet_balance , reward_balance } = action.payload
+      return { ...state, isLoadingHomeData: "successful", services, promotions, wallet_balance, reward_balance };
+    });
+    builder.addCase(getHomeData.rejected, (state, action) => {
+      return { ...state, isLoadingHomeData: "failed" };
     });
   },
 });

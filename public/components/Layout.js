@@ -26,7 +26,8 @@ const Layout = ({ children }) => {
             <Box
                 height='100vh'
                 backgroundColor='#F7F8F9'
-                flexGrow={1}
+                // flexGrow={1}
+                width={'100%'}
                 overflow='scroll'
                 
             >

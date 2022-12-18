@@ -8,7 +8,7 @@ const Header = () => {
     const { primary, text, primary_faded } = theme.colors.brand
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)');
 
-    const { user: { username} } = useAppSelector(
+    const { user: { username}, wallet_balance , reward_balance } = useAppSelector(
         ({ authReducer }) => authReducer
     )
 
@@ -52,7 +52,7 @@ const Header = () => {
                         fontFamily='Poppins'
                         fontWeight={500}
                         color={text}
-                    >100</Text>
+                    >{reward_balance}</Text>
                 </HStack>
             </HStack>
         </HStack>

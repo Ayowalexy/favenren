@@ -262,3 +262,28 @@ export const loginNofitication = createAsyncThunk(
     }
   }
 );
+
+
+export const getHomeData = createAsyncThunk(
+  "auth/getHomeData",
+  async (data: object, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/home`,
+        method: "get",
+      });
+      const authData = response.data;
+      console.log("response", response)
+      return authData
+    } catch (error) {
+      console.log("response", error)
+      if (axios.isAxiosError(error) && error.response) {
+        const msg = error.response.data.message as string || 'An error occured, please try again'
+        toast.error(msg);
+        return thunkAPI.rejectWithValue(msg)
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);

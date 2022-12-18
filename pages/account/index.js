@@ -1,5 +1,7 @@
 import Layout from "../../public/components/Layout";
 import { Box, Text, VStack, HStack, useTheme, Tabs, TabList, TabPanels, Tab, TabPanel, Select, Input, Button } from "@chakra-ui/react";
+import { useAppSelector } from "../../public/redux/store";
+import { useState } from "react";
 
 const VButton = ({ children }) => {
     const theme = useTheme();
@@ -21,40 +23,47 @@ const VButton = ({ children }) => {
     )
 }
 
-const IIput = ({ label, name }) => (
-    <VStack
-        spacing='5px'
-        align='flex-start'
-        width='100%'
-    >
-
-        <Text
-            fontSize='16px'
-            color='#333F51'
-            paddingTop='20px'
-            fontWeight={500}
-            fontFamily='Poppins'
-        >{label}</Text>
-        <Input
-            color='#8896AB'
-            fontWeight={400}
-            fontSize='15px'
+const IIput = ({ label, name, value }) => {
+    const [val, setVal] = useState(value)
+    return (
+        <VStack
+            spacing='5px'
+            align='flex-start'
             width='100%'
-            height='60px'
-            borderRadius='10px'
-            backgroundColor='#F7F8F9'
-            outline='none'
-            paddingLeft='20px'
-            border='1px solid rgba(0,0,0,0.1)'
-            placeholder={name}
-        />
-    </VStack>
-)
+        >
 
+            <Text
+                fontSize='16px'
+                color='#333F51'
+                paddingTop='20px'
+                fontWeight={500}
+                fontFamily='Poppins'
+            >{label}</Text>
+            <Input
+                color='#8896AB'
+                fontWeight={400}
+                fontSize='15px'
+                width='100%'
+                value={val}
+                height='60px'
+                onChange={e => setVal(e.target.value)}
+                borderRadius='10px'
+                backgroundColor='#F7F8F9'
+                outline='none'
+                paddingLeft='20px'
+                border='1px solid rgba(0,0,0,0.1)'
+                placeholder={name}
+            />
+        </VStack>
+    )
+}
 
 const Account = () => {
     const theme = useTheme();
     const { text_2, btn } = theme.colors.brand;
+    const { user: { username, name, email, phone } } = useAppSelector(
+        ({ authReducer }) => authReducer
+    )
 
     return (
         <Layout>
@@ -92,23 +101,23 @@ const Account = () => {
                         >
                             <Tab
                                 _selected={{ color: '#10B6E8', borderBottom: '3px solid #10B6E8' }}
-                                fontSize={{base: '14px', lg: '24px', md: '24px'}}
+                                fontSize={{ base: '14px', lg: '24px', md: '24px' }}
                                 fontWeight={500}
                                 color='#000'
-                                marginRight={{base: '20px', lg: '50px', md: '50px'}}
+                                marginRight={{ base: '20px', lg: '50px', md: '50px' }}
                                 fontFamily='Poppins'
                             >Personal</Tab>
                             <Tab
                                 _selected={{ color: '#10B6E8', borderBottom: '3px solid #10B6E8' }}
-                                fontSize={{base: '14px', lg: '24px', md: '24px'}}
+                                fontSize={{ base: '14px', lg: '24px', md: '24px' }}
                                 fontWeight={500}
                                 color='#000'
-                                marginRight={{base: '20px', lg: '50px', md: '50px'}}
+                                marginRight={{ base: '20px', lg: '50px', md: '50px' }}
                                 fontFamily='Poppins'
                             >Bank Account</Tab>
                             <Tab
                                 _selected={{ color: '#10B6E8', borderBottom: '3px solid #10B6E8' }}
-                                fontSize={{base: '14px', lg: '24px', md: '24px'}}
+                                fontSize={{ base: '14px', lg: '24px', md: '24px' }}
                                 fontWeight={500}
                                 color='#000'
                                 fontFamily='Poppins'
@@ -118,9 +127,9 @@ const Account = () => {
                         <TabPanels>
                             <TabPanel>
                                 <VStack
-                                    margin={{base: '0px', md: '30px 20px', lg: '30px 20px'}}
+                                    margin={{ base: '0px', md: '30px 20px', lg: '30px 20px' }}
                                     align='flex-start'
-                                    width={{base: '100%', md: '80%', lg: '80%'}}
+                                    width={{ base: '100%', md: '80%', lg: '80%' }}
                                 >
                                     <HStack
                                         spacing='30px'
@@ -128,8 +137,8 @@ const Account = () => {
                                         <Box
                                             backgroundColor='#D9D9D9'
                                             borderRadius='50%'
-                                            height={{base: '90px', lg: '145.48px', md: '145.48px'}}
-                                            width={{base: '90px', lg: '145.48px', md: '145.48px'}}
+                                            height={{ base: '90px', lg: '145.48px', md: '145.48px' }}
+                                            width={{ base: '90px', lg: '145.48px', md: '145.48px' }}
                                         />
                                         <VStack
                                             align='flex-start'
@@ -138,26 +147,29 @@ const Account = () => {
                                                 color='#000'
                                                 fontSize='24px'
                                                 fontWeight={500}
-                                            >Oluwatobi Michael</Text>
+                                            >{name}</Text>
                                             <Text
                                                 color='#10B6E8'
                                                 fontSize='18px'
                                                 fontWeight={500}
-                                            >@devoluwatobi</Text>
+                                            >@{username}</Text>
                                         </VStack>
                                     </HStack>
 
                                     <IIput
                                         label='Full name'
                                         name='full name'
+                                        value={name}
                                     />
                                     <IIput
                                         label='Email'
                                         name='email'
+                                        value={email}
                                     />
                                     <IIput
                                         label='phone'
                                         name='phone'
+                                        value={phone}
                                     />
 
                                     <HStack align='flex-start'>
@@ -171,8 +183,8 @@ const Account = () => {
                             <TabPanel>
                                 <VStack
                                     align='flex-start'
-                                    margin={{base: '0px', md: '30px 20px', lg: '30px 20px'}}
-                                    width={{base: '100%', md: '80%', lg: '80%'}}
+                                    margin={{ base: '0px', md: '30px 20px', lg: '30px 20px' }}
+                                    width={{ base: '100%', md: '80%', lg: '80%' }}
                                 >
                                     <IIput
                                         label='Account Number'
@@ -195,10 +207,10 @@ const Account = () => {
                                 </VStack>
                             </TabPanel>
                             <TabPanel>
-                            <VStack
+                                <VStack
                                     align='flex-start'
-                                    margin={{base: '0px', md: '30px 20px', lg: '30px 20px'}}
-                                    width={{base: '100%', md: '80%', lg: '80%'}}
+                                    margin={{ base: '0px', md: '30px 20px', lg: '30px 20px' }}
+                                    width={{ base: '100%', md: '80%', lg: '80%' }}
                                 >
                                     <IIput
                                         label='Current Password'

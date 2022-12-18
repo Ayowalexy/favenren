@@ -1,6 +1,15 @@
 import { Box, Text, HStack, VStack, Image } from "@chakra-ui/react";
+import { useAppSelector } from "../../public/redux/store";
+import { useRouter } from "next/router";
+import { useNavigation } from "../../public/context/navigationContext";
 
 const Actions = () => {
+    const router = useRouter();
+    const { active, setActive } = useNavigation();
+
+    const { services } = useAppSelector(
+        ({ authReducer }) => authReducer
+    )
     return (
         <HStack
             width='100%'
@@ -28,100 +37,61 @@ const Actions = () => {
                     Quick Actions
                 </Text>
             </HStack>
-            <VStack
-                spacing='0px'
-                width={{ base: '100%', md: '46%', lg: '48%' }}
-                height='120px'
-                borderRadius='15px'
-                align='flex-start'
-                padding='30px'
-                backgroundColor='#E6F2F6'
-                bgSize='contain'
-                backgroundRepeat='no-repeat'
-                bgPos='right'
-                bgImage={{
-                    base: 'url("/images/img/img1.png")'
-                }}
-            >
-                <Text
-                    color='#3D7D98'
-                    fontSize='17px'
-                    fontWeight={500}
-                    fontFamily='Poppins'
-                    width={{base: '80%'}}
-                >Trade Gift Cards</Text>
-                <Text
-                    color='#000'
-                    fontSize='14px'
-                    fontWeight={400}
-                    fontFamily='Poppins'
-                    width={{base: '80%'}}
-                >Sell your Gift cards at market leading rates</Text>
-            </VStack>
-            <VStack
-                spacing='0px'
-                width={{ base: '100%', md: '46%', lg: '48%' }}
-                height='120px'
-                borderRadius='15px'
-                align='flex-start'
-                padding='30px'
-                boxSizing='border-box'
-                marginInlineStart={0}
-                backgroundColor='#E6F2F6'
-                bgSize='contain'
-                backgroundRepeat='no-repeat'
-                bgPos='right'
-                bgImage={{
-                    base: 'url("/images/img/img2.png")'
-                }}
-            >
-                <Text
-                    color='#3D7D98'
-                    fontSize='17px'
-                    fontWeight={500}
-                    fontFamily='Poppins'
-                    width={{base: '80%'}}
-                >Trade Cryptocurrency</Text>
-                <Text
-                    color='#000'
-                    fontSize='14px'
-                    fontWeight={400}
-                    fontFamily='Poppins'
-                    width={{base: '80%'}}
-                >Sell your Gift cards at market leading rates</Text>
-            </VStack>
-            <VStack
-                flexGrow={1}
-                spacing='0px'
-                width={{ base: '100%', md: '48%', lg: '48%' }}
-                height='120px'
-                borderRadius='15px'
-                align='flex-start'
-                marginInlineStart={0}
-                padding='30px'
-                backgroundColor='#E6F2F6'
-                bgSize='contain'
-                backgroundRepeat='no-repeat'
-                bgPos='right'
-                bgImage={{
-                    base: 'url("/images/img/img3.png")'
-                }}
-            >
-                <Text
-                    color='#3D7D98'
-                    fontSize='17px'
-                    fontWeight={500}
-                    fontFamily='Poppins'
-                    // width={{base: '80%'}}
-                >Pay Bills, Buy Airtime & Data</Text>
-                <Text
-                    color='#000'
-                    fontSize='14px'
-                    fontWeight={400}
-                    fontFamily='Poppins'
-                    width={{base: '80%'}}
-                >Sell your Gift cards at market leading rates</Text>
-            </VStack>
+            {
+                services.slice(0, 4).map(element => (
+                    <VStack
+                        key={element.id}
+                        spacing='0px'
+                        width={{ base: '100%', md: '46%', lg: '48%' }}
+                        height={{lg: '120px', md: '120px', base: '180px'}}
+                        borderRadius='15px'
+                        align='flex-start'
+                        padding='30px'
+                        backgroundColor='#E6F2F6'
+                        bgSize='contain'
+                        cursor='pointer'
+                        backgroundRepeat='no-repeat'
+                        bgPos='right'
+                        onClick={() => {
+
+                            if (element.title === 'Trade Gift Cards') {
+                                setActive('Trade Giftcard')
+                                router.push('/trade-giftcard')
+                            } else if (element.title === 'Trade Cryptocurrencies') {
+                                setActive('Trade Crypto')
+                                router.push('/trade-crypto')
+                            } else {
+                                setActive('Dashboard')
+                                router.push('/dashboard')
+                            }
+                        }}
+                        bgImage={{
+                            base: `url(${element.icon})`
+                        }}
+                    >
+                        <Box>
+                            <Text
+                                color='#3D7D98'
+                                fontSize='17px'
+                                fontWeight={500}
+
+                                fontFamily='Poppins'
+                                width={{ base: '80%' }}
+                            >{element.title}</Text>
+                            
+                            <Text
+                                color='#000'
+                                fontSize='14px'
+                                fontWeight={400}
+                                fontFamily='Poppins'
+                                width={{ base: '60%' }}
+                            >{element.description}</Text>
+                        </Box>
+                    </VStack>
+                ))
+            }
+           
+
         </HStack>
     )
 }

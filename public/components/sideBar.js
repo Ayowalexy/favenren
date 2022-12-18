@@ -13,6 +13,7 @@ import { IoIosArrowBack } from 'react-icons/io'
 import { useNavigation } from '../context/navigationContext'
 import { navigations } from "./navigations";
 import { useRouter } from "next/router";
+import { useAppSelector } from "../redux/store";
 
 const SideBar = () => {
     const { active, setActive } = useNavigation();
@@ -20,6 +21,11 @@ const SideBar = () => {
     const router = useRouter();
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
     const [isLesserThan1200] = useMediaQuery('(max-width: 1200px)')
+
+    const { user: { username, name}  } = useAppSelector(
+        ({ authReducer }) => authReducer
+    )
+
 
     useEffect(() => {
         if (isLargerThan600 && isLesserThan1200) {
@@ -35,7 +41,7 @@ const SideBar = () => {
                 isLargerThan600 && isLesserThan1200
                     ? '7%'
                     : '4%'
-                : '18%'}
+                : '22%'}
             height='100vh'
             transition="all ease 500ms"
             backgroundColor='#fff'
@@ -135,7 +141,7 @@ const SideBar = () => {
                                     fontSize='18px'
                                     fontFamily='Poppins'
                                 >
-                                    Devoluwatobi
+                                    {name}
                                 </Text>
                                 <Text
                                     color='#63708C'
@@ -143,7 +149,7 @@ const SideBar = () => {
                                     fontSize='13px'
                                     fontFamily='Poppins'
                                 >
-                                    Developer
+                                    {username}
                                 </Text>
                             </VStack>
                         )}

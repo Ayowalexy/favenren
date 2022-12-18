@@ -2,12 +2,19 @@ import { HStack, Text, Box, VStack, useTheme, useMediaQuery } from "@chakra-ui/r
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { useState } from "react";
 import { FaWallet } from 'react-icons/fa'
+import { useAppSelector } from "../../public/redux/store";
 
 const Wallet = () => {
     const theme = useTheme();
     const [showBalance, setShow] = useState(true);
     const { wallet_bg, text, primary } = theme.colors.brand;
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
+
+
+    const { wallet_balance } = useAppSelector(
+        ({ authReducer }) => authReducer
+    )
+
 
     return (
         <Box>
@@ -54,7 +61,7 @@ const Wallet = () => {
                                 showBalance
                                     ?
                                     <>
-                                        ₦0<span style={{ color: text, fontSize: '14px' }}>.00</span>
+                                        ₦{wallet_balance}<span style={{ color: text, fontSize: '14px' }}></span>
                                     </>
                                     :
                                     '* * * *'
