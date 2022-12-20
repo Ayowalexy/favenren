@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import { BsFillCloudUploadFill } from 'react-icons/bs'
 import { useFileUpload } from "../../public/hooks/fileUpload";
 import { AiFillCloseCircle } from 'react-icons/ai'
+import { useUser } from "../../public/context/userContext";
 
 const validationSchema = Yup.object().shape({
     usd_amount: Yup.string().required("USD Amount is required")
@@ -24,6 +25,7 @@ const TradeCrypto = () => {
     const [val_, setValue] = useState('')
     const [crypto_amount, set_crypto_amount] = useState(0)
     const router = useRouter();
+    const { setCryptoData } = useUser()
     const dispatch = useDispatch();
 
     const { deleteSelectedImage, fileList, handleFileUpload } =
@@ -39,16 +41,18 @@ const TradeCrypto = () => {
     }, [])
 
     useEffect(() => {
-       if(fileList.length){
-        const data = {
-            crypto_amount,
-            usd_amount: values.usd_amount,
-            crypto_wallet_type_id: singleCrypto.crypto_wallet_type_id,
-            crypto_id: singleCrypto.crypto_id,
-            ngn_amount: 700 * Number(values.usd_amount),
-            proof: fileList[0].file
+        if (fileList.length) {
+            const data = {
+                crypto_amount,
+                usd_amount: values.usd_amount,
+                crypto_wallet_type_id: singleCrypto.crypto_wallet_type_id,
+                crypto_id: singleCrypto.crypto_id,
+                ngn_amount: 700 * Number(values.usd_amount),
+                proof: fileList[0].file
+            }
+
+            setCryptoData(data)
         }
-       }
     }, [singleCrypto, crypto_amount, fileList])
 
     const {
@@ -67,6 +71,7 @@ const TradeCrypto = () => {
             router.push(`/trade-crypto/${selected.toLowerCase()}`)
         },
     });
+
 
 
     return (
@@ -180,7 +185,6 @@ const TradeCrypto = () => {
 
                                         placeholder='Blockchain'>
                                         <option value='option1'>Blockchain</option>
-                                        <option value='option2'>Blockchain</option>
                                     </Select>
                                 </VStack>
 
@@ -205,22 +209,27 @@ const TradeCrypto = () => {
                                         value={val_}
                                         width='100%'
                                         height='60px'
-
+                                        type='number'
                                         name='usd_amount'
                                         onBlur={handleBlur}
                                         onChange={(event) => {
                                             event.preventDefault()
                                             const { value } = event.target
-                                            const last = value[value?.length - 1]
-                                            if (Number(last)) {
+                                            setValue(value)
+                                            handleChange(event)
+                                            const val = values.usd_amount;
+                                            const amunt_ = Number(val) / 10000
+                                            set_crypto_amount(amunt_)
+                                            // const last = value[value?.length - 1]
+                                            // if (Number(last)) {
 
-                                                setValue(value)
-                                                handleChange(event)
-                                                const val = values.usd_amount;
-                                                const amunt_ = Number(val) / 10000
-                                                set_crypto_amount(amunt_)
+                                            //     setValue(value)
+                                            //     handleChange(event)
+                                            //     const val = values.usd_amount;
+                                            //     const amunt_ = Number(val) / 10000
+                                            //     set_crypto_amount(amunt_)
 
-                                            }
+                                            // }
 
                                         }}
                                         borderRadius='10px'
@@ -249,7 +258,7 @@ const TradeCrypto = () => {
                                 <HStack
                                     align='flex-start'
                                     width='100%'
-                                    flexDirection={{base: 'column', md: 'row', lg: 'row'}}
+                                    flexDirection={{ base: 'column', md: 'row', lg: 'row' }}
                                     marginBottom='30px'
                                 >
                                     <HStack
@@ -398,7 +407,7 @@ const TradeCrypto = () => {
                                             color='#000000'
                                             fontWeight={600}
                                         >
-                                            {crypto_amount}BTC
+                                            {Number(val_) / 1000000}BTC
                                         </Text>
                                     </HStack>
 

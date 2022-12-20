@@ -13,6 +13,7 @@ import { getWalletAddress } from "../../public/redux/reducers/cards/thunkAction"
 import { Preloader } from "../Auth/otp";
 
 
+
 const TradeCoin = () => {
     const [coin, setCoin] = useState("");
     const [address, setAddress] = useState("1wertvybunimokljhgfcdxrctfyuikmljnbhgfctyguhi1wertvybunimokljhgfcdxrctfyuikmljnbhgfctyguhi")
@@ -33,13 +34,13 @@ const TradeCoin = () => {
         setCoin(router?.query?.coin)
     }, [router?.query?.coin])
 
-    console.log("walletAddress", walletAddress, singleCrypto)
 
     useEffect(() => {
         if (singleCrypto.crypto_id && singleCrypto.crypto_wallet_type_id) {
             dispatch(getWalletAddress(singleCrypto))
         }
     }, [singleCrypto])
+
 
     
     return (
@@ -196,7 +197,14 @@ const TradeCoin = () => {
 
                             </VStack>
                         </Box>
-                        <ConfirmModal isOpen={isOpen} setIsOpen={setIsOpen} setIsSuccessOpen={setIsSuccessOpen} isSuccessOpen={isSuccessOpen} />
+                        <ConfirmModal 
+                            isOpen={isOpen} 
+                            setIsOpen={setIsOpen} 
+                            setIsSuccessOpen={setIsSuccessOpen} 
+                            isSuccessOpen={isSuccessOpen} 
+                            wallet_id={walletAddress?.crypto_wallet_type_id}
+
+                        />
                         <SuccessModal isOpen={isSuccessOpen} setIsOpen={setIsSuccessOpen} />
 
                     </>

@@ -2,7 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   getCard,
   getCryto,
-  getWalletAddress
+  getWalletAddress,
+  getSingleGiftcard,
+  getTransactions,
+  makecryptotransaction
 } from "./thunkAction";
 
 interface crytoTypes {
@@ -16,6 +19,10 @@ interface IState {
   cryptos: []
   singleCrypto: crytoTypes;
   walletAddress: string;
+  singleGiftcard: [];
+  singleGiftcardId: string;
+  countryFlags: [];
+  transactions: []
 }
 
 const initialState: IState = {
@@ -27,7 +34,11 @@ const initialState: IState = {
     crypto_wallet_type_id: null
 
   },
-  walletAddress: ''
+  walletAddress: '',
+  singleGiftcard: [],
+  singleGiftcardId: '',
+  countryFlags: [],
+  transactions: []
 
 };
 
@@ -44,6 +55,13 @@ const cardSlice = createSlice({
         }
       };
     },
+
+    setSingleGiftcard: (state, action) => {
+      return {
+        ...state,
+        singleGiftcardId: action.payload
+      }
+    }
   },
 
   extraReducers: (builder) => {
@@ -88,8 +106,57 @@ const cardSlice = createSlice({
       return { ...state, loading: "failed" };
     });
 
+    // get single giftcard
+    builder.addCase(getSingleGiftcard.pending, (state) => {
+      return { ...state, loading: "pending" };
+    });
+
+    builder.addCase(getSingleGiftcard.fulfilled, (state, action) => {
+      const country = action.payload?.map((ele: any) => ele.country_iso)
+      return { 
+        ...state, 
+        loading: "successful", 
+        singleGiftcard: action.payload,
+        countryFlags: country
+       };
+    });
+
+    builder.addCase(getSingleGiftcard.rejected, (state, action) => {
+      console.log(action.payload);
+      return { ...state, loading: "failed" };
+    });
+
+    // get transactions
+    builder.addCase(getTransactions.pending, (state) => {
+      return { ...state, loading: "pending" };
+    });
+
+    builder.addCase(getTransactions.fulfilled, (state, action) => {
+      return { ...state, loading: "successful", transactions: action.payload };
+    });
+
+    builder.addCase(getTransactions.rejected, (state, action) => {
+      console.log(action.payload);
+      return { ...state, loading: "failed" };
+    });
+
+
+    // make transactions
+    builder.addCase(makecryptotransaction.pending, (state) => {
+      return { ...state, loading: "pending" };
+    });
+
+    builder.addCase(makecryptotransaction.fulfilled, (state) => {
+      return { ...state, loading: "successful" };
+    });
+
+    builder.addCase(makecryptotransaction.rejected, (state, action) => {
+      console.log(action.payload);
+      return { ...state, loading: "failed" };
+    });
+
   },
 });
 
 export const cardReducer = cardSlice.reducer;
-export const { setSingleCrypto } = cardSlice.actions
+export const { setSingleCrypto, setSingleGiftcard } = cardSlice.actions

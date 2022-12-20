@@ -72,3 +72,70 @@ export const getWalletAddress = createAsyncThunk(
     }
   }
 );
+
+
+export const getSingleGiftcard = createAsyncThunk(
+  "card/getSingleGiftcard",
+  async (id, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/show-giftcards/${id}`,
+        method: "get",
+      });
+
+      return response.data;
+    } catch (error) {
+
+      if (axios.isAxiosError(error) && error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);
+
+
+export const getTransactions = createAsyncThunk(
+  "card/getTransactions",
+  async (id, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/transactions`,
+        method: "get",
+      });
+
+      return response.data;
+    } catch (error) {
+
+      if (axios.isAxiosError(error) && error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);
+
+
+export const makecryptotransaction = createAsyncThunk(
+  "card/makecryptotransaction",
+  async (data, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/make-crypto-transaction`,
+        method: "post",
+        data: data
+      });
+      console.log('response', response.data)
+      return response.data;
+    } catch (error) {
+      console.log('error', error)
+      if (axios.isAxiosError(error) && error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);

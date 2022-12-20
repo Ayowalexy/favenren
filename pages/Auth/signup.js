@@ -134,7 +134,6 @@ const Signup = () => {
         },
     });
 
-    console.log(message)
 
     return (
         <AuthLayout>

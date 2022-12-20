@@ -11,12 +11,37 @@ import {
     HStack,
     VStack
 } from '@chakra-ui/react'
+import { useUser } from '../context/userContext'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { makecryptotransaction } from '../redux/reducers/cards/thunkAction'
+
+const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen, wallet_id }) => {
+
+    const { cryptoData } = useUser()
+    const dispatch = useDispatch();
+
+    const handleSend = async () => {
+        const formData = new FormData();
+        for (let data in cryptoData) {
+            formData.append(data, cryptoData[data])
+        }
+        formData.append('crypto_wallet_address_id', 1)
+
+        await dispatch(makecryptotransaction(formData)).then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+                setIsOpen(!isOpen)
+                setTimeout(() => {
+                    setIsSuccessOpen(!isSuccessOpen)
+                }, 200)
+            }
+        })
+    }
 
 
-const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen }) => {
     return (
         <>
-            <Modal size={{base: 'sm', lg:'xl', md: 'xl'}} isOpen={isOpen} onClose={() => setIsOpen(!isOpen)}>
+            <Modal size={{ base: 'sm', lg: 'xl', md: 'xl' }} isOpen={isOpen} onClose={() => setIsOpen(!isOpen)}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader
@@ -63,10 +88,8 @@ const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen }) =>
                                 height='46px'
                                 color='#fff'
                                 colorScheme='blue' mr={3} onClick={() => {
-                                    setIsOpen(!isOpen)
-                                    setTimeout(() => {
-                                        setIsSuccessOpen(!isSuccessOpen)
-                                    }, 2000 )
+                                    handleSend()
+
                                 }}>
                                 I Agree
                             </Button>

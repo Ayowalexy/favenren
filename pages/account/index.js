@@ -1,9 +1,27 @@
 import Layout from "../../public/components/Layout";
-import { Box, Text, VStack, HStack, useTheme, Tabs, TabList, TabPanels, Tab, TabPanel, Select, Input, Button } from "@chakra-ui/react";
+import { Box, Text, VStack, HStack, useTheme, Tabs, TabList, TabPanels, Tab, TabPanel, Select, Input, Button, useToast } from "@chakra-ui/react";
 import { useAppSelector } from "../../public/redux/store";
 import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from 'yup';
+import { updatePassword } from "../../public/redux/reducers/auth/thunkAction";
+import { useDispatch } from "react-redux";
 
-const VButton = ({ children }) => {
+const validationSchema = Yup.object().shape({
+    old_password: Yup.string().required('Old password is required'),
+    password: Yup.string()
+        .min(6, ({ min }) => `Password must be at least ${min} characters`)
+        .required("Password is required"),
+    confirm_password: Yup.string().test(
+        "passwords-match",
+        "Passwords must match",
+        function (value) {
+            return this.parent.password === value;
+        }
+    ),
+})
+
+const VButton = ({ children, isLoading, onClick }) => {
     const theme = useTheme();
     const { text_2, btn } = theme.colors.brand;
 
@@ -13,6 +31,8 @@ const VButton = ({ children }) => {
             marginTop='40px'
             alignSelf='center'
             color='#fff'
+            onClick={onClick}
+            isLoading={isLoading}
             backgroundColor={btn}
             height='56px'
             fontWeight={500}
@@ -58,12 +78,86 @@ const IIput = ({ label, name, value }) => {
     )
 }
 
+const IIput2 = ({ label, name, value, handleChange, handleBlur, el_name }) => {
+    const [val, setVal] = useState(value)
+    return (
+        <VStack
+            spacing='5px'
+            align='flex-start'
+            width='100%'
+        >
+
+            <Text
+                fontSize='16px'
+                color='#333F51'
+                paddingTop='20px'
+                fontWeight={500}
+                fontFamily='Poppins'
+            >{label}</Text>
+            <Input
+                color='#8896AB'
+                fontWeight={400}
+                fontSize='15px'
+                width='100%'
+                value={val}
+                name={el_name}
+                height='60px'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                borderRadius='10px'
+                backgroundColor='#F7F8F9'
+                outline='none'
+                paddingLeft='20px'
+                border='1px solid rgba(0,0,0,0.1)'
+                placeholder={name}
+            />
+        </VStack>
+    )
+}
+
 const Account = () => {
     const theme = useTheme();
     const { text_2, btn } = theme.colors.brand;
-    const { user: { username, name, email, phone } } = useAppSelector(
+    const dispatch = useDispatch();
+    const toast = useToast();
+    const { user: { username, name, email, phone }, loading } = useAppSelector(
         ({ authReducer }) => authReducer
     )
+
+    const {
+        handleSubmit,
+        handleChange,
+        handleBlur,
+        isSubmitting,
+        errors,
+        touched,
+    } = useFormik({
+        initialValues: {
+           old_password: '',
+           password: '',
+           confirm_password: ''
+        },
+        validationSchema,
+        onSubmit: async (values) => {
+            const data = {
+                old_password: values.old_password,
+                password: values.password
+            }
+            await dispatch(updatePassword(data)).then(res => {
+                if(res.meta.requestStatus === 'fulfilled'){
+                    toast({
+                        title: 'Success',
+                        description: "Password updated successfully",
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                        position: 'top-right'
+                    })
+                }
+            })
+        },
+    });
+
 
     return (
         <Layout>
@@ -189,6 +283,7 @@ const Account = () => {
                                     <IIput
                                         label='Account Number'
                                         name='Account Number'
+
                                     />
                                     <IIput
                                         label='Bank'
@@ -212,21 +307,51 @@ const Account = () => {
                                     margin={{ base: '0px', md: '30px 20px', lg: '30px 20px' }}
                                     width={{ base: '100%', md: '80%', lg: '80%' }}
                                 >
-                                    <IIput
+                                    <IIput2
                                         label='Current Password'
                                         name='Current Password'
+                                        handleBlur={handleBlur}
+                                        handleChange={handleChange}
+                                        el_name='old_password'
                                     />
-                                    <IIput
+                                    {
+                                        errors.old_password && (
+                                            <Text color='red' fontSize='13px'>
+                                                {errors.old_password}
+                                            </Text>
+                                        )
+                                    }
+                                    <IIput2
                                         label='New Password'
                                         name='New Password'
+                                        handleBlur={handleBlur}
+                                        handleChange={handleChange}
+                                        el_name='password'
                                     />
-                                    <IIput
+                                     {
+                                        errors.password && (
+                                            <Text color='red' fontSize='13px'>
+                                                {errors.password}
+                                            </Text>
+                                        )
+                                    }
+                                    <IIput2
                                         label='Confirm New Password'
                                         name='new password again'
+                                        handleBlur={handleBlur}
+                                        handleChange={handleChange}
+                                        el_name='confirm_password'
                                     />
+                                     {
+                                        errors.confirm_password && (
+                                            <Text color='red' fontSize='13px'>
+                                                {errors.confirm_password}
+                                            </Text>
+                                        )
+                                    }
 
                                     <HStack align='flex-start'>
-                                        <VButton>
+                                        <VButton onClick={handleSubmit} isLoading={loading === 'pending' ? true : false}>
                                             Update Password
                                         </VButton>
                                     </HStack>

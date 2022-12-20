@@ -69,20 +69,23 @@ const Login = () => {
         validationSchema,
         onSubmit: async (values) => {
             await dispatch(login(values)).then(async res => {
-                await dispatch(getHomeData()).then(res => {
-                    if (res.meta.requestStatus === 'fulfilled') {
-                        toast({
-                            title: 'Login success.',
-                            description: "Welcome back",
-                            status: 'success',
-                            duration: 3000,
-                            isClosable: true,
-                            position: 'top-right'
-                        })
-                        handleSendLoginNotification()
-                        router.push('/dashboard')
-                    }
-                })
+                if(res.meta.requestStatus === 'fulfilled'){
+                    await dispatch(getHomeData()).then(res => {
+                        if (res.meta.requestStatus === 'fulfilled') {
+                            toast({
+                                title: 'Login success.',
+                                description: "Welcome back",
+                                status: 'success',
+                                duration: 3000,
+                                isClosable: true,
+                                position: 'top-right'
+                            })
+                            handleSendLoginNotification()
+                            router.push('/dashboard')
+                        }
+                    })
+                }
+                
             })
         },
     });

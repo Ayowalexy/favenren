@@ -9,7 +9,8 @@ import {
   resetPassword,
   checkreferer,
   loginNofitication,
-  getHomeData
+  getHomeData,
+  updatePassword
 } from "./thunkAction";
 
 interface IState {
@@ -195,6 +196,19 @@ const authSlice = createSlice({
     });
     builder.addCase(getHomeData.rejected, (state, action) => {
       return { ...state, isLoadingHomeData: "failed" };
+    });
+
+
+    //update password
+    builder.addCase(updatePassword.pending, (state) => {
+      return { ...state, loading: "pending" };
+    });
+
+    builder.addCase(updatePassword.fulfilled, (state ) => {
+      return { ...state, loading: "successful"};
+    });
+    builder.addCase(updatePassword.rejected, (state, action) => {
+      return { ...state, loading: "failed" };
     });
   },
 });

@@ -8,15 +8,20 @@ import { useAppSelector } from "../../public/redux/store";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getCard } from "../../public/redux/reducers/cards/thunkAction";
+import { setSingleGiftcard } from "../../public/redux/reducers/cards";
 
-const Card = ({ img, name }) => {
+
+
+const Card = ({ img, name, id }) => {
     const router = useRouter();
     const { setActive } = useNavigation();
+    const dispatch = useDispatch();
     
 
     return (
         <Flex
             onClick={() => {
+                dispatch(setSingleGiftcard(id))
                 router.push(`/trade-giftcard/${name}`)
             }}
             align='center'
@@ -167,6 +172,7 @@ const GiftCard = () => {
                                     key={element.id} 
                                     name={element.title}
                                     img={element.image} 
+                                    id={element.id}
                                 />
                             ))
                         }
