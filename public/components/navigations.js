@@ -3,6 +3,7 @@ import { AiFillCreditCard } from 'react-icons/ai';
 import { RiHandCoinFill, RiExchangeFill, RiCustomerService2Fill, RiLogoutCircleFill } from 'react-icons/ri';
 import { IoNewspaperSharp } from 'react-icons/io5';
 import { BsPersonFill } from 'react-icons/bs';
+import { MdPayments } from 'react-icons/md'
 
 
 export const navigations = [
@@ -19,6 +20,10 @@ export const navigations = [
         route: '/trade-crypto',
         icon: RiHandCoinFill,
         name: 'Trade Crypto'
+    },{
+        route: '/utility-bills',
+        icon: MdPayments,
+        name: 'Utility Bills'
     },{
         route: '/transactions',
         icon: IoNewspaperSharp,
