@@ -40,7 +40,7 @@ const UtilityBills = () => {
                 <HStack
                     width='100%'
                     marginTop='40px'
-                    gap='30px'
+                    gap={{base: '30px'}}
                     flexWrap='wrap'
                     justify='space-between'
                 >
@@ -75,7 +75,7 @@ const UtilityBills = () => {
                                 backgroundColor='#fff'
                                 height='424px'
                                 width={{
-                                    base: '100%', lg: '32%', md: '32%'
+                                    base: '100%', lg: '30%', md: '30%'
                                 }}
                                 justify='space-evenly'
                                 borderRadius='7px'
