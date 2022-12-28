@@ -139,3 +139,25 @@ export const makecryptotransaction = createAsyncThunk(
     }
   }
 );
+
+
+export const getCardWalletTypes = createAsyncThunk(
+  "card/getCardWalletTypes",
+  async (id, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/cryptos/${id}`,
+        method: "get",
+      });
+      console.log('response', response.data)
+      return response.data;
+    } catch (error) {
+      console.log('error', error)
+      if (axios.isAxiosError(error) && error.response) {
+        return thunkAPI.rejectWithValue(error.response);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);

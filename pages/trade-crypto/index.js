@@ -6,33 +6,38 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../public/redux/store";
 import { Preloader } from "../Auth/otp";
 import { setSingleCrypto } from "../../public/redux/reducers/cards";
-import { getCard, getCryto } from "../../public/redux/reducers/cards/thunkAction";
+import { getCard, getCryto, getCardWalletTypes } from "../../public/redux/reducers/cards/thunkAction";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { BsFillCloudUploadFill } from 'react-icons/bs'
 import { useFileUpload } from "../../public/hooks/fileUpload";
 import { AiFillCloseCircle } from 'react-icons/ai'
+import { formatNumber } from "../../public/components/utils/formatter";
 import { useUser } from "../../public/context/userContext";
 
 const validationSchema = Yup.object().shape({
-    usd_amount: Yup.string().required("USD Amount is required")
+    usd_amount: Yup.string().required("USD Amount is required"),
+    proof: Yup.string().required('Proof is required'),
+    coin_type: Yup.string().required('Coin type is required')
 })
 
 const TradeCrypto = () => {
     const theme = useTheme();
-    const [selected, setSelected] = useState("Bitcoin")
+    const [selected, setSelected] = useState("")
     const { text_2 } = theme.colors.brand;
     const [val_, setValue] = useState('')
-    const [crypto_amount, set_crypto_amount] = useState(0)
+    const [crypto_amount, set_crypto_amount] = useState(0);
+    const [selectedWalletData, setSelectedWalletData] = useState({});
     const router = useRouter();
     const { setCryptoData } = useUser()
     const dispatch = useDispatch();
+
 
     const { deleteSelectedImage, fileList, handleFileUpload } =
         useFileUpload(true);
 
 
-    const { cryptos, loading, singleCrypto } = useAppSelector(
+    const { cryptos, loading, singleCrypto, walletTypes } = useAppSelector(
         ({ cardReducer }) => cardReducer
     )
 
@@ -47,9 +52,11 @@ const TradeCrypto = () => {
                 usd_amount: values.usd_amount,
                 crypto_wallet_type_id: singleCrypto.crypto_wallet_type_id,
                 crypto_id: singleCrypto.crypto_id,
-                ngn_amount: 700 * Number(values.usd_amount),
-                proof: fileList[0].file
+                ngn_amount: Number(walletTypes?.usd_rate) * Number(values.usd_amount),
+                proof: fileList[0]
             }
+
+            console.log('Dataaa', data)
 
             setCryptoData(data)
         }
@@ -62,16 +69,27 @@ const TradeCrypto = () => {
         values,
         errors,
         touched,
+        setFieldValue
     } = useFormik({
         initialValues: {
-            usd_amount: ""
+            usd_amount: "",
+            proof: '',
+            coin_type: ''
         },
         validationSchema,
         onSubmit: async (values) => {
+            console.log(values)
             router.push(`/trade-crypto/${selected.toLowerCase()}`)
         },
     });
 
+    useEffect(() => {
+        if (fileList.length) {
+            for(let ele of fileList){
+                setFieldValue('proof', ele.file.name)
+            }
+        }
+    }, [fileList])
 
 
     return (
@@ -119,11 +137,16 @@ const TradeCrypto = () => {
                                             cursor='pointer'
                                             onClick={() => {
                                                 setSelected(element.name)
-                                                const data = {
-                                                    crypto_id: element.id,
-                                                    crypto_wallet_type_id: element.service_id
-                                                }
-                                                dispatch(setSingleCrypto(data))
+                                                // const data = {
+                                                //     crypto_id: element.id,
+                                                //     crypto_wallet_type_id: element.service_id
+                                                // }
+                                                setFieldValue('coin_type', element.id)
+                                                setSelectedWalletData({
+                                                    ...selectedWalletData,
+                                                    crypto_id: element.id
+                                                })
+                                                dispatch(getCardWalletTypes(element.id))
                                             }}
                                             backgroundColor='#fff'
                                             height='100px'
@@ -147,6 +170,21 @@ const TradeCrypto = () => {
                                 ))
                                 }
                             </HStack>
+
+                            {
+                                errors.coin_type && (
+                                    <Text
+                                        fontSize='13px'
+                                        color='red'
+                                        fontWeight={400}
+                                        textAlign='left'
+                                        alignSelf='flex-start'
+                                        fontFamily='Poppins'
+                                    >
+                                        {errors.coin_type}
+                                    </Text>
+                                )
+                            }
 
                             <VStack
                                 marginTop='40px'
@@ -182,9 +220,21 @@ const TradeCrypto = () => {
                                         outline='none'
                                         paddingTop='10px'
                                         border='1px solid rgba(0,0,0,0.1)'
+                                        onChange={(e) => {
+                                            const data = {
+                                                ...selectedWalletData,
+                                                crypto_wallet_type_id: e.target.value
 
-                                        placeholder='Blockchain'>
-                                        <option value='option1'>Blockchain</option>
+                                            }
+                                            setSelectedWalletData(data)
+                                            dispatch(setSingleCrypto(data))
+                                        }}
+                                        placeholder='Select wallet type'>
+                                        {
+                                            walletTypes?.crypto_wallet_types?.map((element, idx) => (
+                                                <option value={`${element.id}`} key={idx}>{element?.name}</option>
+                                            ))
+                                        }
                                     </Select>
                                 </VStack>
 
@@ -237,7 +287,7 @@ const TradeCrypto = () => {
                                         outline='none'
                                         paddingLeft='20px'
                                         border='1px solid rgba(0,0,0,0.1)'
-                                        placeholder="200"
+                                        placeholder="Enter amount in USD"
                                     />
                                 </VStack>
                                 {
@@ -270,7 +320,7 @@ const TradeCrypto = () => {
                                         border='1px dotted #10B6E8'
                                     >
                                         {
-                                            fileList && fileList.map(ele => (
+                                            fileList && fileList.slice(fileList.length -1 ).map(ele => (
                                                 <HStack
                                                     key={ele.id}
                                                     bgPos='center'
@@ -357,9 +407,23 @@ const TradeCrypto = () => {
                                         </HStack>
                                     </label>
                                 </HStack>
+                                {
+                                    errors.proof && (
+                                        <Text
+                                            fontSize='13px'
+                                            color='red'
+                                            fontWeight={400}
+                                            textAlign='left'
+                                            alignSelf='flex-start'
+                                            fontFamily='Poppins'
+                                        >
+                                            {errors.proof}
+                                        </Text>
+                                    )
+                                }
+                                <Box height='20px' />
                                 <VStack
                                     width='100%'
-
                                     height='249px'
                                     borderRadius='10px'
                                     backgroundColor='#D5DAE1'
@@ -385,7 +449,7 @@ const TradeCrypto = () => {
                                             color='#000000'
                                             fontWeight={600}
                                         >
-                                            707.0/$
+                                            {walletTypes?.usd_rate}/$
                                         </Text>
                                     </HStack>
 
@@ -400,14 +464,14 @@ const TradeCrypto = () => {
                                             color='#000'
                                             fontWeight={400}
                                         >
-                                            Bitcoin Value
+                                            USD Value
                                         </Text>
                                         <Text
                                             fontSize='16px'
                                             color='#000000'
                                             fontWeight={600}
                                         >
-                                            {Number(val_) / 1000000}BTC
+                                            {formatNumber(walletTypes?.usd_value)}$
                                         </Text>
                                     </HStack>
 
@@ -428,7 +492,7 @@ const TradeCrypto = () => {
                                             color='#000'
                                             fontWeight={500}
                                             fontFamily='Poppins'
-                                        >₦57,000<span style={{ fontSize: '14px', color: '#9B9B9B' }}>.00</span>
+                                        >${formatNumber(Number(walletTypes?.usd_rate) * Number(val_))}<span style={{ fontSize: '14px', color: '#9B9B9B' }}>.00</span>
                                         </Text>
                                     </HStack>
 

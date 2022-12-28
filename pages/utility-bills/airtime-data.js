@@ -203,6 +203,13 @@ const BillsPayment = () => {
                                     >Choose Network</Text>
                                     <Select
                                         options={options}
+                                        styles={{
+                                            control: (baseStyles, state) => ({
+                                              ...baseStyles,
+                                              backgroundColor: '#F7F8F9',
+                                             
+                                            }),
+                                          }}
                                         onChange={(e) => {
                                             const data = networks.find(ele => ele.data_service_id === e.value);
                                             setFieldValue('service_id', data.service_id)
@@ -210,7 +217,7 @@ const BillsPayment = () => {
                                         }}
                                         className='select_bill' />
                                 </VStack>
-                                {errors.service_id && (
+                                {!!errors.service_id && touched.service_id && (
                                     <Text color='red'>{errors.service_id}</Text>
                                 )}
 
@@ -231,6 +238,13 @@ const BillsPayment = () => {
                                             >Service Category</Text>
                                             <Select
                                                 options={billsOptions}
+                                                styles={{
+                                                    control: (baseStyles, state) => ({
+                                                      ...baseStyles,
+                                                      backgroundColor: '#F7F8F9',
+                                                     
+                                                    }),
+                                                  }}
                                                 onChange={(e) => setType(e.value)}
                                                 className='select_bill' />
 
@@ -275,7 +289,7 @@ const BillsPayment = () => {
                                                                     placeholder='200'
                                                                 />
                                                             </VStack>
-                                                            {errors.amount && (
+                                                            {!!errors.amount && touched.amount && (
                                                                 <Text color='red'>{errors.amount}</Text>
                                                             )}
                                                         </>
@@ -298,6 +312,13 @@ const BillsPayment = () => {
                                                                 >Data Plan</Text>
                                                                 <Select
                                                                     options={dataPlans}
+                                                                    styles={{
+                                                                        control: (baseStyles, state) => ({
+                                                                          ...baseStyles,
+                                                                          backgroundColor: '#F7F8F9',
+                                                                         
+                                                                        }),
+                                                                      }}
                                                                     isLoading={isLoading === 'pending' ? true : false}
                                                                     onChange={(e) => {
                                                                         const data = networkData?.content?.variations?.find(ele => ele.variation_code === e.value)
@@ -308,7 +329,7 @@ const BillsPayment = () => {
 
 
                                                             </VStack>
-                                                            {errors.amount && (
+                                                            {!!errors.amount && touched.amount && (
                                                                 <Text color='red'>{errors.amount}</Text>
                                                             )}
                                                         </>
@@ -343,7 +364,7 @@ const BillsPayment = () => {
                                                     placeholder='200'
                                                 />
                                             </VStack>
-                                            {errors.number && (
+                                            {!!errors.number && touched.number  && (
                                                 <Text color='red'>{errors.number}</Text>
                                             )}
                                         </>

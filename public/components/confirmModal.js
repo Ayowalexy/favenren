@@ -14,6 +14,7 @@ import {
 import { useUser } from '../context/userContext'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { useAppSelector } from '../redux/store'
 import { makecryptotransaction } from '../redux/reducers/cards/thunkAction'
 
 const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen, wallet_id }) => {
@@ -25,8 +26,9 @@ const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen, wall
         const formData = new FormData();
         for (let data in cryptoData) {
             formData.append(data, cryptoData[data])
+            
         }
-        formData.append('crypto_wallet_address_id', 1)
+        formData.append('crypto_wallet_address_id', wallet_id)
 
         await dispatch(makecryptotransaction(formData)).then(res => {
             if (res.meta.requestStatus === 'fulfilled') {

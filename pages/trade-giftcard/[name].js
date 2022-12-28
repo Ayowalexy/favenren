@@ -14,6 +14,7 @@ import { Preloader } from "../Auth/otp";
 import { useFileUpload } from "../../public/hooks/fileUpload";
 import { useFormik } from "formik";
 import { Formik, Field } from "formik";
+import { formatNumber } from "../../public/components/utils/formatter";
 
 
 const TradeCard = () => {
@@ -29,6 +30,8 @@ const TradeCard = () => {
     const [value, setValue] = useState('')
     const [rangeValue, setRangeValue] = useState("");
     const [showError, setShowError] = useState(false);
+    const [selectedValue, setSelectedValue] = useState('')
+
     const { deleteSelectedImage, fileList, handleFileUpload } =
         useFileUpload(true);
     const { singleGiftcard, loading, singleGiftcardId, countryFlags } = useAppSelector(
@@ -188,11 +191,13 @@ const TradeCard = () => {
                                     outline='none'
                                     paddingTop='10px'
                                     border='1px solid rgba(0,0,0,0.1)'
-
+                                    onChange={(e) => {
+                                        setSelectedValue(e.target.value)
+                                    }}
                                     placeholder='physical'>
                                     {
                                         categories?.map(element => (
-                                            <option value={`${element.title}`} key={element.id}>
+                                            <option value={`${element.amount}`} key={element.id}>
                                                 {`${element.title}`}
                                             </option>
                                         ))
@@ -413,8 +418,8 @@ const TradeCard = () => {
                                         color='#000'
                                         fontWeight={500}
                                         fontFamily='Poppins'
-                                    >₦57,000<span style={{ fontSize: '14px', color: '#9B9B9B' }}>.00</span>
-                                    </Text>
+                                        >₦{formatNumber(Number(selectedValue)* Number(value))}<span style={{ fontSize: '14px', color: '#9B9B9B' }}>.00</span>
+                                        </Text>
                                 </VStack>
                                 <Button
                                     color='#fff'

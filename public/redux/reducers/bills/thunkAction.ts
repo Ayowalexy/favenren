@@ -58,6 +58,36 @@ export const getNetworkdata = createAsyncThunk(
 );
 
 
+export const getBillsData = createAsyncThunk(
+  "bill/getBillData",
+  async (data: object, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/get-tv-packages`,
+        method: "get",
+        params: data,
+      });
+
+      return response.data;
+    } catch (error) {
+
+
+      if (axios.isAxiosError(error) && error.response) {
+        let err = error.response.data as { error: { message: string } };
+        console.log('err', err)
+
+        const msg = error.response.data.message[0] as string || 'An error occured, please try again'
+        toast.error(msg);
+        return thunkAPI.rejectWithValue(msg);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);
+
+
+
 export const buyData = createAsyncThunk(
   "bill/buyData",
   async (data: object, thunkAPI) => {
@@ -86,12 +116,123 @@ export const buyData = createAsyncThunk(
   }
 );
 
+export const buyCable = createAsyncThunk(
+  "bill/buyCable",
+  async (data: object, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/buy-cable`,
+        method: "post",
+        data: data,
+      });
+      
+      return response.data;
+    } catch (error) {
+
+
+      if (axios.isAxiosError(error) && error.response) {
+        let err = error.response.data as { error: { message: string } };
+        console.log('err', err)
+
+        const msg = error.response.data.error as string || 'An error occured, please try again'
+        toast.error(msg);
+        return thunkAPI.rejectWithValue(msg);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);
+
 export const buyAirtime = createAsyncThunk(
   "bill/airtime",
   async (data: object, thunkAPI) => {
     try {
       const response = await useAxios({
         url: `${config.API_BASE_URL}/buy-airtime`,
+        method: "post",
+        params: data,
+      });
+      
+      return response.data;
+    } catch (error) {
+
+
+      if (axios.isAxiosError(error) && error.response) {
+        let err = error.response.data as { error: { message: string } };
+        console.log('err', err)
+
+        const msg = error.response.data.error as string || 'An error occured, please try again'
+        toast.error(msg);
+        return thunkAPI.rejectWithValue(msg);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);
+
+
+export const getElectricity = createAsyncThunk(
+  "bill/electricity",
+  async (data: object, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/get-electric-list`,
+        method: "get",
+      });
+      
+      return response.data;
+    } catch (error) {
+
+
+      if (axios.isAxiosError(error) && error.response) {
+        let err = error.response.data as { error: { message: string } };
+        console.log('err', err)
+
+        const msg = error.response.data.error as string || 'An error occured, please try again'
+        toast.error(msg);
+        return thunkAPI.rejectWithValue(msg);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);
+
+export const getBills = createAsyncThunk(
+  "bill/GetBills",
+  async (data: object, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/get-tv-list`,
+        method: "get",
+      });
+      
+      return response.data;
+    } catch (error) {
+
+
+      if (axios.isAxiosError(error) && error.response) {
+        let err = error.response.data as { error: { message: string } };
+        console.log('err', err)
+
+        const msg = error.response.data.error as string || 'An error occured, please try again'
+        toast.error(msg);
+        return thunkAPI.rejectWithValue(msg);
+      } else {
+        return thunkAPI.rejectWithValue(String(error));
+      }
+    }
+  }
+);
+
+export const buyElectricity = createAsyncThunk(
+  "bill/buyElectricity",
+  async (data: object, thunkAPI) => {
+    try {
+      const response = await useAxios({
+        url: `${config.API_BASE_URL}/buy-electricity`,
         method: "post",
         params: data,
       });

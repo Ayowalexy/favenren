@@ -5,7 +5,8 @@ import {
   getWalletAddress,
   getSingleGiftcard,
   getTransactions,
-  makecryptotransaction
+  makecryptotransaction,
+  getCardWalletTypes
 } from "./thunkAction";
 
 interface crytoTypes {
@@ -16,18 +17,21 @@ interface crytoTypes {
 interface IState {
   cards: [];
   loading: "failed" | "pending" | "successful" | "idle";
+  isLoading: "failed" | "pending" | "successful" | "idle";
   cryptos: []
   singleCrypto: crytoTypes;
   walletAddress: string;
   singleGiftcard: [];
   singleGiftcardId: string;
   countryFlags: [];
-  transactions: []
+  transactions: [];
+  walletTypes: [];
 }
 
 const initialState: IState = {
   cards: [],
   loading: "idle",
+  isLoading: 'idle',
   cryptos: [],
   singleCrypto: {
     crypto_id: null,
@@ -38,8 +42,8 @@ const initialState: IState = {
   singleGiftcard: [],
   singleGiftcardId: '',
   countryFlags: [],
-  transactions: []
-
+  transactions: [],
+  walletTypes: []
 };
 
 const cardSlice = createSlice({
@@ -153,6 +157,21 @@ const cardSlice = createSlice({
     builder.addCase(makecryptotransaction.rejected, (state, action) => {
       console.log(action.payload);
       return { ...state, loading: "failed" };
+    });
+
+
+    // get wallet types
+    builder.addCase(getCardWalletTypes.pending, (state) => {
+      return { ...state, isLoading: "pending" };
+    });
+
+    builder.addCase(getCardWalletTypes.fulfilled, (state, action) => {
+      return { ...state, isLoading: "successful" , walletTypes: action.payload};
+    });
+
+    builder.addCase(getCardWalletTypes.rejected, (state, action) => {
+      console.log(action.payload);
+      return { ...state, isLoading: "failed" };
     });
 
   },
