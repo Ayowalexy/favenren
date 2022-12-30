@@ -28,6 +28,8 @@ const TradeCoin = () => {
         ({ cardReducer }) => cardReducer
     )
 
+    console.log('wallet address', walletAddress)
+
     const { text_2, btn, text_3, faded_bg } = theme.colors.brand;
 
     useEffect(() => {

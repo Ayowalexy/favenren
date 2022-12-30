@@ -53,7 +53,7 @@ const TradeCrypto = () => {
                 crypto_wallet_type_id: singleCrypto.crypto_wallet_type_id,
                 crypto_id: singleCrypto.crypto_id,
                 ngn_amount: Number(walletTypes?.usd_rate) * Number(values.usd_amount),
-                proof: fileList[0]
+                proof: fileList[0]?.file
             }
 
             console.log('Dataaa', data)
@@ -268,7 +268,7 @@ const TradeCrypto = () => {
                                             setValue(value)
                                             handleChange(event)
                                             const val = values.usd_amount;
-                                            const amunt_ = Number(val) / 10000
+                                            const amunt_ = Number(val) / Number(walletTypes?.usd_value)
                                             set_crypto_amount(amunt_)
                                             // const last = value[value?.length - 1]
                                             // if (Number(last)) {
@@ -291,7 +291,7 @@ const TradeCrypto = () => {
                                     />
                                 </VStack>
                                 {
-                                    errors.usd_amount && (
+                                    !!errors.usd_amount && touched.usd_amount && (
                                         <Text
                                             fontSize='13px'
                                             color='red'
@@ -464,14 +464,16 @@ const TradeCrypto = () => {
                                             color='#000'
                                             fontWeight={400}
                                         >
-                                            USD Value
+                                            Bitcoin Value
                                         </Text>
                                         <Text
                                             fontSize='16px'
                                             color='#000000'
                                             fontWeight={600}
                                         >
-                                            {formatNumber(walletTypes?.usd_value)}$
+                                            {
+                                                Boolean(crypto_amount) && Number(crypto_amount) / Number(walletTypes?.usd_value)
+                                            }
                                         </Text>
                                     </HStack>
 
