@@ -4,6 +4,7 @@ import { RiHandCoinFill, RiExchangeFill, RiCustomerService2Fill, RiLogoutCircleF
 import { IoNewspaperSharp } from 'react-icons/io5';
 import { BsPersonFill } from 'react-icons/bs';
 import { MdPayments } from 'react-icons/md'
+import { FaSlideshare } from 'react-icons/fa'
 
 
 export const navigations = [
@@ -32,6 +33,10 @@ export const navigations = [
         route: '/rate-checker',
         icon: RiExchangeFill,
         name: 'Rate Checker'
+    },{
+        route: '/referral',
+        icon: FaSlideshare,
+        name: 'Referrals'
     },{
         route: '/help-desk',
         icon: RiCustomerService2Fill,

@@ -74,7 +74,7 @@ const SideBar = () => {
                 </HStack>
             }
 
-            <List width='100%' pt={"50px"} spacing={1}>
+            <List width='100%' pt={"50px"} spacing={'-5px'}>
 
                 {navigations.map((element, idx) => (
                     <ListItem
