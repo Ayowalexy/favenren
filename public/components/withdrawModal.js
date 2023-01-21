@@ -24,16 +24,75 @@ import { useAppSelector } from '../redux/store'
 import { formatNumber } from './utils/formatter'
 import { makecryptotransaction } from '../redux/reducers/cards/thunkAction'
 import { AiOutlineArrowLeft } from 'react-icons/ai'
+import { useFormik } from "formik";
+import * as Yup from 'yup';
+import WithdrawStatusModal from './withdrawStatus'
+import { withdrawReward, withdrawWallet } from '../redux/reducers/cards/thunkAction'
 
 
 
-const WithdrawModal = ({ isOpen, setIsOpen }) => {
+
+
+const WithdrawModal = ({ isOpen, setIsOpen, setShow, setAmount, type }) => {
 
     const { cryptoData } = useUser()
-    const dispatch = useDispatch();
     const [value, setValue] = useState('')
+    const dispatch = useDispatch();
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
 
+    const validationSchema = Yup.object().shape({
+        amount: Yup
+            .number()
+            .min(type === 'wallet' ? 10000 : 20, `Must be more than ${type === 'wallet' ? '10,000' : '20'}`)
+            .max(type === 'wallet' ? 500000 : 100, `Must be lesser or equal to ${type === 'wallet' ? '500,000' : '100'}`)
+            .required('Enter amount')
+    })
+
+    const {
+        handleSubmit,
+        handleChange,
+        handleBlur,
+        setFieldValue,
+        isSubmitting,
+        errors,
+        touched,
+        values
+    } = useFormik({
+        initialValues: {
+            amount: "",
+        },
+        validationSchema,
+        onSubmit: async (values) => {
+            setAmount(values.amount)
+            setIsOpen(false)
+            if (type === 'wallet') {
+                handleWalletWithdraw(values)
+            } else {
+                handleWithdrawReward(values)
+            }
+
+        },
+    });
+
+    const handleWithdrawReward = async (values) => {
+        await dispatch(withdrawReward(values)).then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+                setShow(true)
+            } else {
+                setShow(true)
+            }
+        })
+    }
+
+    const handleWalletWithdraw = async (values) => {
+        await dispatch(withdrawWallet(values)).then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+                setShow(true)
+            } else {
+                setShow(true)
+            }
+        })
+    }
 
 
     return (
@@ -51,7 +110,7 @@ const WithdrawModal = ({ isOpen, setIsOpen }) => {
                     <ModalHeader
                         color='#2A3342'
                         fontWeight={700}
-                        fontSize={{base: '15px', md: '20px', lg: '20px'}}
+                        fontSize={{ base: '15px', md: '20px', lg: '20px' }}
                         marginTop='30px'
                         fontFamily='Poppins'
                     >Enter the amount you want to withdraw</ModalHeader>
@@ -81,8 +140,10 @@ const WithdrawModal = ({ isOpen, setIsOpen }) => {
                                 color='#000'
                                 backgroundColor='#F4F6F9'
                                 textAlign='center'
-                                value={formatNumber(value)}
-                                onChange={(e) => setValue(e.target.value)}
+                                name='amount'
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.amount}
                                 outline='none'
                                 _focus={{
                                     outline: 'none'
@@ -90,13 +151,28 @@ const WithdrawModal = ({ isOpen, setIsOpen }) => {
 
                             />
                         </InputGroup>
+                        {!!errors.amount && touched.amount && (
+                            <Text
+                                color='red'
+                                fontSize='12px'
+                            >{errors.amount}</Text>
+                        )}
                         <Text
-                            fontSize={{base: '12px', md: '16px', lg: '16px'}}
+                            fontSize={{ base: '12px', md: '16px', lg: '16px' }}
                             color='#000'
                             paddingTop='10px'
                             fontWeight='400'
                         >
-                            Limit for this transaction is between <span style={{ fontWeight: '700' }}>₦10,000</span> and <span style={{ fontWeight: '700' }}>₦5,000,000</span>
+                            {
+                                type === 'wallet'
+                                    ? <>
+                                        Limit for this transaction is between <span style={{ fontWeight: '700' }}>₦10,000</span> and <span style={{ fontWeight: '700' }}>₦5,000,000</span>
+                                    </>
+                                    :
+                                    <>
+                                        Limit for this transaction is between <span style={{ fontWeight: '700' }}>₦20</span> and <span style={{ fontWeight: '700' }}>₦100</span>
+                                    </>
+                            }
                         </Text>
                     </ModalBody>
 
@@ -109,9 +185,9 @@ const WithdrawModal = ({ isOpen, setIsOpen }) => {
                                 fontWeight={500}
                                 fontSize='16px'
                                 fontFamily='Poppins'
-                                onClick={() => setIsOpen(false)}
                                 background='#10B6E8'
                                 width='100%'
+                                onClick={handleSubmit}
                                 height='46px'
                                 color='#fff'
                                 colorScheme='blue' mr={3} >

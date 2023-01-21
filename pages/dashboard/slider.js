@@ -1,13 +1,22 @@
-import { Carousel } from '@trendyol-js/react-carousel';
 import { Box, Text, Flex, HStack, VStack, useMediaQuery } from '@chakra-ui/react';
 import { useAppSelector } from '../../public/redux/store';
+import Slider from "react-slick";
+import { Carousel } from '@trendyol-js/react-carousel';
 
 
-const Slider = () => {
+const Slider_ = () => {
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)');
     const { promotions } = useAppSelector(
         ({ authReducer }) => authReducer
     )
+
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    };
 
     return (
         <>
@@ -19,27 +28,28 @@ const Slider = () => {
                         width='100%'
                     // display='flex'
                     >
-                        <HStack height='100%' width='2700px'>
-                            {
-                                promotions.map(element => (
-                                    <Box
-                                        key={element.banner_url}
-                                        width='900px'
-                                        height='100%'
-                                        marginRight='10px'
-                                        bgSize='cover'
-                                        borderRadius='20px'
-                                        backgroundRepeat='no-repeat'
-                                        bgPos='center'
-                                        bgImage={{
-                                            base: `url("${element.banner_url}")`
-                                        }}
-                                    />
-                                ))
-                            }
-
-                        </HStack>
-
+                        {/* <HStack height='100%' width='2700px'> */}
+                            <Carousel show={1.1} slide={3} swiping={true}>
+                                {
+                                    promotions.map(element => (
+                                        <Box
+                                            key={element.banner_url}
+                                            width='900px'
+                                            height='200px'
+                                            marginRight='10px'
+                                            bgSize='cover'
+                                            borderRadius='20px'
+                                            backgroundRepeat='no-repeat'
+                                            bgPos='center'
+                                            backgroundColor='red'
+                                            bgImage={{
+                                                base: `url("${element.banner_url}")`
+                                            }}
+                                        />
+                                    ))
+                                }
+                            </Carousel>
+                        {/* </HStack> */}
                     </Box>
                     :
                     (
@@ -98,4 +108,4 @@ const Slider = () => {
     )
 }
 
-export default Slider
+export default Slider_

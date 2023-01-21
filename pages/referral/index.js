@@ -2,18 +2,27 @@ import Layout from "../../public/components/Layout";
 import { Box, Text, VStack, HStack, useTheme, Select, Input, Button, Image, Link, useMediaQuery } from "@chakra-ui/react";
 import { useState } from "react";
 import WithdrawModal from "../../public/components/withdrawModal";
-
+import WithdrawStatusModal from "../../public/components/withdrawStatus";
+import { Preloader } from "../Auth/otp";
+import { useSelector } from "react-redux";
 
 const Referrals = () => {
     const theme = useTheme();
     const [selected, setSelected] = useState('US');
     const [visible, setVisible] = useState(false);
+    const [show, setShow] = useState(false)
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
     const { text_2, btn, primary, wallet_bg } = theme.colors.brand;
+    const [amount, setAmount] = useState('')
+    const { loading } = useSelector(state => state.cardReducer);
+
 
 
     return (
         <Layout>
+            {
+                loading === 'pending' && <Preloader />
+            }
             <Box
                 padding={{
                     lg: '45px 30px', md: '45px 30px', base: '100px 20px'
@@ -276,7 +285,8 @@ const Referrals = () => {
                             </VStack>
                         </HStack>
                     </VStack>
-                    <WithdrawModal isOpen={visible} setIsOpen={setVisible} />
+                    <WithdrawModal setShow={setShow} setAmount={setAmount} isOpen={visible} setIsOpen={setVisible} />
+                    <WithdrawStatusModal amount={amount} isOpen={show} setIsOpen={setShow} />
                 </VStack>
             </Box>
         </Layout>

@@ -1,11 +1,15 @@
 import Layout from "../../public/components/Layout";
 import { Box, Text, VStack, HStack, useTheme, Tabs, TabList, TabPanels, Tab, TabPanel, Select, Input, Button, useToast } from "@chakra-ui/react";
 import { useAppSelector } from "../../public/redux/store";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { updatePassword } from "../../public/redux/reducers/auth/thunkAction";
 import { useDispatch } from "react-redux";
+import { getBanks, getUserBankAccount } from "../../public/redux/reducers/cards/thunkAction";
+import AddUserBank from "./addbank";
+
+
 
 const validationSchema = Yup.object().shape({
     old_password: Yup.string().required('Old password is required'),
@@ -21,7 +25,7 @@ const validationSchema = Yup.object().shape({
     ),
 })
 
-const VButton = ({ children, isLoading, onClick }) => {
+ export const VButton = ({ children, isLoading, onClick }) => {
     const theme = useTheme();
     const { text_2, btn } = theme.colors.brand;
 
@@ -124,6 +128,16 @@ const Account = () => {
         ({ authReducer }) => authReducer
     )
 
+    const { allBanks, isLoading, bankAccount: { account_number, account_name, bank_name }, gettingUserBankAccount } = useAppSelector(
+        ({ cardReducer }) => cardReducer
+    )
+
+    useEffect(() => {
+        dispatch(getUserBankAccount())
+    }, [])
+
+    console.log(account_number, account_name)
+
     const {
         handleSubmit,
         handleChange,
@@ -133,9 +147,9 @@ const Account = () => {
         touched,
     } = useFormik({
         initialValues: {
-           old_password: '',
-           password: '',
-           confirm_password: ''
+            old_password: '',
+            password: '',
+            confirm_password: ''
         },
         validationSchema,
         onSubmit: async (values) => {
@@ -144,7 +158,7 @@ const Account = () => {
                 password: values.password
             }
             await dispatch(updatePassword(data)).then(res => {
-                if(res.meta.requestStatus === 'fulfilled'){
+                if (res.meta.requestStatus === 'fulfilled') {
                     toast({
                         title: 'Success',
                         description: "Password updated successfully",
@@ -157,6 +171,7 @@ const Account = () => {
             })
         },
     });
+
 
 
     return (
@@ -275,31 +290,40 @@ const Account = () => {
                                 </VStack>
                             </TabPanel>
                             <TabPanel>
-                                <VStack
-                                    align='flex-start'
-                                    margin={{ base: '0px', md: '30px 20px', lg: '30px 20px' }}
-                                    width={{ base: '100%', md: '80%', lg: '80%' }}
-                                >
-                                    <IIput
-                                        label='Account Number'
-                                        name='Account Number'
+                                {
+                                    account_name && account_number ? (
+                                        <VStack
+                                            align='flex-start'
+                                            margin={{ base: '0px', md: '30px 20px', lg: '30px 20px' }}
+                                            width={{ base: '100%', md: '80%', lg: '80%' }}
+                                        >
+                                            <IIput
+                                                label='Account Number'
+                                                name='Account Number'
+                                                value={account_number}
 
-                                    />
-                                    <IIput
-                                        label='Bank'
-                                        name='Bank'
-                                    />
-                                    <IIput
-                                        label='Account Holder’s Name'
-                                        name='name'
-                                    />
+                                            />
+                                            <IIput
+                                                label='Bank'
+                                                name='Bank'
+                                                value={bank_name}
+                                            />
+                                            <IIput
+                                                label='Account Holder’s Name'
+                                                name='name'
+                                                value={account_name}
+                                            />
 
-                                    <HStack align='flex-start'>
-                                        <VButton>
-                                            Update Bank details
-                                        </VButton>
-                                    </HStack>
-                                </VStack>
+                                            <HStack align='flex-start'>
+                                                <VButton>
+                                                    Update Bank details
+                                                </VButton>
+                                            </HStack>
+                                        </VStack>
+                                    )
+                                        :
+                                        <AddUserBank />
+                                }
                             </TabPanel>
                             <TabPanel>
                                 <VStack
@@ -328,7 +352,7 @@ const Account = () => {
                                         handleChange={handleChange}
                                         el_name='password'
                                     />
-                                     {
+                                    {
                                         errors.password && (
                                             <Text color='red' fontSize='13px'>
                                                 {errors.password}
@@ -342,7 +366,7 @@ const Account = () => {
                                         handleChange={handleChange}
                                         el_name='confirm_password'
                                     />
-                                     {
+                                    {
                                         errors.confirm_password && (
                                             <Text color='red' fontSize='13px'>
                                                 {errors.confirm_password}

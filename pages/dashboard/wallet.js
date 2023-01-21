@@ -2,22 +2,36 @@ import { HStack, Text, Box, VStack, useTheme, useMediaQuery } from "@chakra-ui/r
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { useState } from "react";
 import { FaWallet } from 'react-icons/fa'
+import WithdrawModal from "../../public/components/withdrawModal";
+import WithdrawStatusModal from "../../public/components/withdrawStatus";
 import { useAppSelector } from "../../public/redux/store";
+import { Preloader } from "../Auth/otp";
+import { useSelector } from "react-redux";
 
 const Wallet = () => {
     const theme = useTheme();
     const [showBalance, setShow] = useState(true);
     const { wallet_bg, text, primary } = theme.colors.brand;
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
+    const [visible, setVisible] = useState(false);
+    const [show, setShow_] = useState(false)
+    const [amount, setAmount] = useState('')
 
 
     const { wallet_balance } = useAppSelector(
         ({ authReducer }) => authReducer
     )
 
+    const { isLoading } = useAppSelector(
+        ({ cardReducer }) => cardReducer
+    )
+
 
     return (
         <Box>
+            {
+                isLoading === 'pending' && <Preloader />
+            }
             <HStack
                 align='center'
                 justify='space-between'
@@ -70,8 +84,26 @@ const Wallet = () => {
                     </VStack>
                 </VStack>
 
-
-                <FaWallet fill={text} size={'30px'} />
+                <HStack
+                    width='200px'
+                    backgroundColor={primary}
+                    justify='center'
+                    marginTop='15px'
+                    borderRadius='10px'
+                    align='center'
+                    height='50px'
+                    cursor='pointer'
+                    onClick={() => setVisible(true)}
+                >
+                    <Text
+                        color='#fff'
+                        fontSize='16px'
+                        fontWeight={500}
+                        fontFamily='Poppins'
+                    >
+                        Withdraw
+                    </Text>
+                </HStack>
 
             </HStack>
             {
@@ -84,6 +116,9 @@ const Wallet = () => {
                         borderRadius='10px'
                         align='center'
                         height='50px'
+                        cursor='pointer'
+                        onClick={() => setVisible(true)}
+
                     >
                         <Text
                             color='#fff'
@@ -96,6 +131,8 @@ const Wallet = () => {
                     </HStack>
                 )
             }
+            <WithdrawModal setShow={setShow_} setAmount={setAmount} isOpen={visible} type='wallet' setIsOpen={setVisible} />
+            <WithdrawStatusModal amount={amount} isOpen={show} setIsOpen={setShow_} type='wallet' />
         </Box>
     )
 }

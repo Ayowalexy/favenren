@@ -38,7 +38,7 @@ const Actions = () => {
                 </Text>
             </HStack>
             {
-                services.slice(0, 4).map(element => (
+                services.slice(0, 4).map((element, idx) => (
                     <VStack
                         key={element.id}
                         spacing='0px'
@@ -66,7 +66,8 @@ const Actions = () => {
                             }
                         }}
                         bgImage={{
-                            base: `url(${element.icon})`
+                            // base: `url(${element.icon})`
+                            base: `url(/images/img/img${idx + 1}.png)`
                         }}
                     >
                         <Box>

@@ -17,11 +17,15 @@ import { getTransactions } from "../../public/redux/reducers/cards/thunkAction";
 import { useAppSelector } from "../../public/redux/store";
 import { AiOutlineUser } from 'react-icons/ai'
 import { Preloader } from "../Auth/otp";
+import Pagination from "./pagination";
 
 const Transactions = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const { text_2, btn } = theme.colors.brand;
+    const [paginatedValues, setPaginatedValues] = useState(
+        []
+      );
 
     const { transactions, loading } = useAppSelector(
         ({ cardReducer }) => cardReducer
@@ -30,7 +34,7 @@ const Transactions = () => {
     console.log('transactions', transactions)
 
     useEffect(() => {
-        dispatch(getTransactions())
+        // dispatch(getTransactions())
     }, [])
     return (
         <Layout>
@@ -148,72 +152,99 @@ const Transactions = () => {
                                                                 </Thead>
                                                                 <Tbody>
                                                                     {
-                                                                        transactions?.map(element => (
-                                                                            <Tr key={element.id}>
+                                                                        paginatedValues?.map(element => {
+                                                                            return (
+                                                                                <Tr key={element.id}>
 
-                                                                                <Td>
-                                                                                    <Text
-                                                                                        color={'#2D3436'}
-                                                                                        fontSize={'14px'}
-                                                                                        fontWeight={300}
-                                                                                        fontFamily='Poppins'
-                                                                                    >
-                                                                                        {element.type}
-                                                                                    </Text>
-
-                                                                                </Td>
-                                                                                <Td>
-                                                                                    <Text
-                                                                                        color={'#2D3436'}
-                                                                                        fontSize={'14px'}
-                                                                                        fontWeight={300}
-                                                                                        fontFamily='Poppins'
-                                                                                    >
-                                                                                       {element.title}
-                                                                                    </Text>
-                                                                                </Td>
-                                                                                <Td>
-                                                                                    <Text
-                                                                                        color={'#2D3436'}
-                                                                                        fontSize={'14px'}
-                                                                                        fontWeight={300}
-                                                                                        fontFamily='Poppins'
-                                                                                    >
-                                                                                        {element.amount}
-                                                                                    </Text>
-                                                                                </Td>
-                                                                                <Td>
-                                                                                    <Text
-                                                                                        color={'#2D3436'}
-                                                                                        fontSize={'14px'}
-                                                                                        fontWeight={300}
-                                                                                        fontFamily='Poppins'
-                                                                                    >
-                                                                                        {new Date(element.created_at).toLocaleDateString()}
-                                                                                    </Text>
-                                                                                </Td>
-                                                                                <Td>
-                                                                                   <Image src={element.icon} width={'40px'} height='40px' />
-                                                                                </Td>
-                                                                                <Td>
-                                                                                    <HStack
-                                                                                        align='center'
-                                                                                        justify='center'
-                                                                                        padding='6px 10px'
-                                                                                        borderRadius='10px'
-                                                                                        border='1px solid #FF3B30'
-                                                                                        backgroundColor='#FCE8EC'
-                                                                                    >
+                                                                                    <Td>
                                                                                         <Text
-                                                                                            color={'#FF3B30'}
+                                                                                            color={'#2D3436'}
                                                                                             fontSize={'14px'}
-                                                                                            fontWeight={400}
+                                                                                            fontWeight={300}
                                                                                             fontFamily='Poppins'
-                                                                                        >{element.status}</Text>
-                                                                                    </HStack>
-                                                                                </Td>
-                                                                            </Tr>
-                                                                        ))
+                                                                                        >
+                                                                                            {element.type}
+                                                                                        </Text>
+
+                                                                                    </Td>
+                                                                                    <Td>
+                                                                                        <Text
+                                                                                            color={'#2D3436'}
+                                                                                            fontSize={'14px'}
+                                                                                            fontWeight={300}
+                                                                                            fontFamily='Poppins'
+                                                                                        >
+                                                                                            {element.title}
+                                                                                        </Text>
+                                                                                    </Td>
+                                                                                    <Td>
+                                                                                        <Text
+                                                                                            color={'#2D3436'}
+                                                                                            fontSize={'14px'}
+                                                                                            fontWeight={300}
+                                                                                            fontFamily='Poppins'
+                                                                                        >
+                                                                                            {element.amount}
+                                                                                        </Text>
+                                                                                    </Td>
+                                                                                    <Td>
+                                                                                        <Text
+                                                                                            color={'#2D3436'}
+                                                                                            fontSize={'14px'}
+                                                                                            fontWeight={300}
+                                                                                            fontFamily='Poppins'
+                                                                                        >
+                                                                                            {new Date(element.created_at).toLocaleDateString()}
+                                                                                        </Text>
+                                                                                    </Td>
+                                                                                    <Td>
+                                                                                        <Image src={element.icon} width={'40px'} height='40px' />
+                                                                                    </Td>
+                                                                                    <Td>
+                                                                                        <HStack
+                                                                                            align='center'
+                                                                                            justify='center'
+                                                                                            padding='6px 10px'
+                                                                                            borderRadius='10px'
+                                                                                            border={
+                                                                                                `1px solid ${element.status === 'Pending' ?
+                                                                                                    '#FF9500'
+                                                                                                    : element.status === 'Completed'
+                                                                                                        ? '#10B6E8'
+                                                                                                        : element.status === 'Failed'
+                                                                                                            ? '#FF3B30'
+                                                                                                            : '#FF3B30'
+                                                                                                }`
+                                                                                            }
+                                                                                            backgroundColor={
+                                                                                                element.status === 'Pending'
+                                                                                                    ? '#FCF6E8'
+                                                                                                    : element.status === 'Completed'
+                                                                                                        ? '#EBF3FE'
+                                                                                                        : element.status === 'Failed'
+                                                                                                            ? '#FCE8EC'
+                                                                                                            : '#FCE8EC'
+                                                                                            }
+                                                                                        >
+                                                                                            <Text
+                                                                                                color={
+                                                                                                    element.status === 'Pending' ?
+                                                                                                        '#FF9500'
+                                                                                                        : element.status === 'Completed'
+                                                                                                            ? '#10B6E8'
+                                                                                                            : element.status === 'Failed'
+                                                                                                                ? '#FF3B30'
+                                                                                                                : '#FF3B30'
+                                                                                                }
+                                                                                                fontSize={'14px'}
+                                                                                                fontWeight={400}
+                                                                                                fontFamily='Poppins'
+                                                                                            >{element.status}</Text>
+                                                                                        </HStack>
+                                                                                    </Td>
+                                                                                </Tr>
+                                                                            )
+                                                                        })
                                                                     }
 
 
@@ -226,7 +257,11 @@ const Transactions = () => {
                                                     </VStack>
                                                 )
                                         }
-
+                                        <Pagination
+                                            values={transactions}
+                                            pageLength={5}
+                                            setNewValues={setPaginatedValues}
+                                        />
 
                                     </Box>
                                 )

@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 let token = "";
 // console.log(typeof window, "window");
-const getToken = () => {
+export const getToken = () => {
   if (typeof window !== "undefined") {
     token = localStorage.getItem("token") || "{}";
   }
