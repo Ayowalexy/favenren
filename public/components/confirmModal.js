@@ -34,6 +34,8 @@ const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen, wall
             formData.append(data, cryptoData[data])
             
         }
+
+        console.log(cryptoData)
         formData.append('crypto_wallet_address_id', singleCrypto?.crypto_wallet_type_id)
 
         await dispatch(makecryptotransaction(formData)).then(res => {

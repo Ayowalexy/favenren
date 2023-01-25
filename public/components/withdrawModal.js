@@ -125,15 +125,17 @@ const WithdrawModal = ({ isOpen, setIsOpen, setShow, setAmount, type }) => {
 
                     >
                         <InputGroup>
-                            <InputLeftElement>
-                                <Text
-                                    fontSize={{ base: '25px', md: '50px', lg: '50px' }}
-                                    paddingLeft='30px'
-                                    paddingTop={{ base: '70px', md: '115px', lg: '115px' }}
-                                    color='#000'
+                            {type === 'wallet' && (
+                                <InputLeftElement>
+                                    <Text
+                                        fontSize={{ base: '25px', md: '50px', lg: '50px' }}
+                                        paddingLeft='30px'
+                                        paddingTop={{ base: '70px', md: '115px', lg: '115px' }}
+                                        color='#000'
 
-                                >₦</Text>
-                            </InputLeftElement>
+                                    >₦</Text>
+                                </InputLeftElement>
+                            )}
                             <Input
                                 fontSize={{ base: '35px', md: '60px', lg: '60px' }}
                                 height={{ base: '110px', md: '160px', lg: '160px' }}

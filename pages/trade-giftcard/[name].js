@@ -268,7 +268,7 @@ const TradeCard = () => {
                             // marginBottom='30px'
                             >
                                 {
-                                    fileList && fileList.map(ele => (
+                                    fileList && fileList.slice(0, 3).map(ele => (
                                         <HStack
                                             justify='center'
                                             align='center'

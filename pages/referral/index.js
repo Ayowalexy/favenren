@@ -4,6 +4,7 @@ import { useState } from "react";
 import WithdrawModal from "../../public/components/withdrawModal";
 import WithdrawStatusModal from "../../public/components/withdrawStatus";
 import { Preloader } from "../Auth/otp";
+import { useAppSelector } from "../../public/redux/store";
 import { useSelector } from "react-redux";
 
 const Referrals = () => {
@@ -15,6 +16,10 @@ const Referrals = () => {
     const { text_2, btn, primary, wallet_bg } = theme.colors.brand;
     const [amount, setAmount] = useState('')
     const { loading } = useSelector(state => state.cardReducer);
+
+    const { user: { username} } = useAppSelector(
+        ({ authReducer }) => authReducer
+    )
 
 
 
@@ -114,7 +119,7 @@ const Referrals = () => {
                                 color={'#fff'}
                                 fontSize={'18px'}
                                 fontWeight={600}
-                            >Withdraw Funds</Button>
+                            >Withdraw Points</Button>
                         )
                     }
 
@@ -176,13 +181,13 @@ const Referrals = () => {
                                         width='100%'
                                         height={{base: '40px', md: '56px', lg: '56px'}}
                                         type='number'
+                                        value={username}
                                         name='usd_amount'
                                         borderRadius='10px'
                                         backgroundColor='#F7F8F9'
                                         outline='none'
                                         paddingLeft='20px'
                                         border='1px solid rgba(0,0,0,0.1)'
-                                        placeholder="Enter amount in USD"
                                     />
                                     <Button
                                         color='#fff'

@@ -56,10 +56,10 @@ const TradeCrypto = () => {
                 proof: fileList[0]?.file
             }
 
-            console.log('Dataaa', data)
-
             setCryptoData(data)
         }
+        console.log('Dataaa',)
+
     }, [singleCrypto, crypto_amount, fileList])
 
     const {

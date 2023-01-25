@@ -128,7 +128,7 @@ const Account = () => {
         ({ authReducer }) => authReducer
     )
 
-    const { allBanks, isLoading, bankAccount: { account_number, account_name, bank_name }, gettingUserBankAccount } = useAppSelector(
+    const { allBanks, isLoading, bankAccount, gettingUserBankAccount } = useAppSelector(
         ({ cardReducer }) => cardReducer
     )
 
@@ -136,7 +136,6 @@ const Account = () => {
         dispatch(getUserBankAccount())
     }, [])
 
-    console.log(account_number, account_name)
 
     const {
         handleSubmit,
@@ -291,7 +290,7 @@ const Account = () => {
                             </TabPanel>
                             <TabPanel>
                                 {
-                                    account_name && account_number ? (
+                                    bankAccount?.account_name && bankAccount?.account_number ? (
                                         <VStack
                                             align='flex-start'
                                             margin={{ base: '0px', md: '30px 20px', lg: '30px 20px' }}
@@ -300,18 +299,18 @@ const Account = () => {
                                             <IIput
                                                 label='Account Number'
                                                 name='Account Number'
-                                                value={account_number}
+                                                value={bankAccount?.account_number}
 
                                             />
                                             <IIput
                                                 label='Bank'
                                                 name='Bank'
-                                                value={bank_name}
+                                                value={bankAccount?.bank_name}
                                             />
                                             <IIput
                                                 label='Account Holder’s Name'
                                                 name='name'
-                                                value={account_name}
+                                                value={bankAccount?.account_name}
                                             />
 
                                             <HStack align='flex-start'>

@@ -31,10 +31,10 @@ const Transactions = () => {
         ({ cardReducer }) => cardReducer
     )
 
-    console.log('transactions', transactions)
+  
 
     useEffect(() => {
-        // dispatch(getTransactions())
+        dispatch(getTransactions())
     }, [])
     return (
         <Layout>

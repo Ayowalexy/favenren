@@ -84,26 +84,30 @@ const Wallet = () => {
                     </VStack>
                 </VStack>
 
-                <HStack
-                    width='200px'
-                    backgroundColor={primary}
-                    justify='center'
-                    marginTop='15px'
-                    borderRadius='10px'
-                    align='center'
-                    height='50px'
-                    cursor='pointer'
-                    onClick={() => setVisible(true)}
-                >
-                    <Text
-                        color='#fff'
-                        fontSize='16px'
-                        fontWeight={500}
-                        fontFamily='Poppins'
-                    >
-                        Withdraw
-                    </Text>
-                </HStack>
+                {
+                    isLargerThan600 && (
+                        <HStack
+                            width='200px'
+                            backgroundColor={primary}
+                            justify='center'
+                            marginTop='15px'
+                            borderRadius='10px'
+                            align='center'
+                            height='50px'
+                            cursor='pointer'
+                            onClick={() => setVisible(true)}
+                        >
+                            <Text
+                                color='#fff'
+                                fontSize='16px'
+                                fontWeight={500}
+                                fontFamily='Poppins'
+                            >
+                                Withdraw
+                            </Text>
+                        </HStack>
+                    )
+                }
 
             </HStack>
             {

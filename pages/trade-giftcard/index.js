@@ -6,7 +6,7 @@ import { useNavigation } from "../../public/context/navigationContext";
 import { Preloader } from "../Auth/otp";
 import { useAppSelector } from "../../public/redux/store";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getCard } from "../../public/redux/reducers/cards/thunkAction";
 import { setSingleGiftcard } from "../../public/redux/reducers/cards";
 
@@ -16,7 +16,7 @@ const Card = ({ img, name, id }) => {
     const router = useRouter();
     const { setActive } = useNavigation();
     const dispatch = useDispatch();
-    
+
 
     return (
         <Flex
@@ -62,6 +62,7 @@ const GiftCard = () => {
     const theme = useTheme();
     const { text_2, box_bg } = theme.colors.brand;
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
+    const [filtred, setFiltred] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -72,6 +73,11 @@ const GiftCard = () => {
     useEffect(() => {
         dispatch(getCard())
     }, [])
+
+    const handleSearch = (val) => {
+        const filter = cards.filter(ele => ele?.title?.toLowerCase()?.includes(val.toLowerCase()));
+        setFiltred(filter)
+    }
 
     return (
         <Layout>
@@ -110,6 +116,7 @@ const GiftCard = () => {
                                         paddingLeft='12px'
                                         height='48px'
                                         fontSize='14px'
+                                        onChange={(e) => handleSearch(e.target.value)}
                                         color='#B2BEC3'
                                         placeholder="Search for giftcard" />
                                     <InputRightAddon
@@ -153,7 +160,7 @@ const GiftCard = () => {
                     }
                 </VStack>
 
-                { loading === 'pending' && <Preloader />}
+                {loading === 'pending' && <Preloader />}
 
                 <HStack
                     spacing='30px'
@@ -165,16 +172,24 @@ const GiftCard = () => {
                     }}
                     marginTop='30px'
                 >
-                    <Box flexWrap='wrap' gap='20px' display='flex' justify='space-between' align='center'>
+                    <Box flexWrap='wrap' width='100%' gap='20px' display='flex' justify='space-between' align='center'>
                         {
-                            cards.map((element) => (
-                                <Card 
-                                    key={element.id} 
+                            filtred.length ? filtred.map((element) => (
+                                <Card
+                                    key={element.id}
                                     name={element.title}
-                                    img={element.image} 
+                                    img={element.image}
                                     id={element.id}
                                 />
                             ))
+                                : cards.map((element) => (
+                                    <Card
+                                        key={element.id}
+                                        name={element.title}
+                                        img={element.image}
+                                        id={element.id}
+                                    />
+                                ))
                         }
                     </Box>
                 </HStack>
