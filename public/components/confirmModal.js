@@ -15,11 +15,11 @@ import { useUser } from '../context/userContext'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../redux/store'
-import { makecryptotransaction } from '../redux/reducers/cards/thunkAction'
+import { makecryptotransaction, makegiftcard } from '../redux/reducers/cards/thunkAction'
 
 
 
-const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen, wallet_id }) => {
+const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen, wallet_id, type = 'crypto' }) => {
 
     const { cryptoData } = useUser()
     const dispatch = useDispatch();
@@ -32,10 +32,10 @@ const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen, wall
         const formData = new FormData();
         for (let data in cryptoData) {
             formData.append(data, cryptoData[data])
-            
+
         }
 
-        console.log(cryptoData)
+        console.log("cryptoData", cryptoData)
         formData.append('crypto_wallet_address_id', singleCrypto?.crypto_wallet_type_id)
 
         await dispatch(makecryptotransaction(formData)).then(res => {
@@ -47,6 +47,26 @@ const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen, wall
             }
         })
     }
+
+    const handleGiftCard = async () => {
+        const formData = new FormData();
+        for (let data in cryptoData) {
+            formData.append(data, cryptoData[data])
+
+        }
+
+        console.log("cryptoData", cryptoData)
+
+        await dispatch(makegiftcard(formData)).then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+                setIsOpen(!isOpen)
+                setTimeout(() => {
+                    setIsSuccessOpen(!isSuccessOpen)
+                }, 200)
+            }
+        })
+    }
+
 
 
     return (
@@ -98,7 +118,12 @@ const ConfirmModal = ({ isOpen, setIsOpen, setIsSuccessOpen, isSuccessOpen, wall
                                 height='46px'
                                 color='#fff'
                                 colorScheme='blue' mr={3} onClick={() => {
-                                    handleSend()
+                                    if(type === 'crypto'){
+                                        handleSend()
+                                    } else {
+                                        handleGiftCard()
+                                    }
+                                    
 
                                 }}>
                                 I Agree

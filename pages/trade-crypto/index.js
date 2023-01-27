@@ -17,7 +17,7 @@ import { useUser } from "../../public/context/userContext";
 
 const validationSchema = Yup.object().shape({
     usd_amount: Yup.string().required("USD Amount is required"),
-    proof: Yup.string().required('Proof is required'),
+    // proof: Yup.string().required('Proof is required'),
     coin_type: Yup.string().required('Coin type is required')
 })
 
@@ -46,21 +46,17 @@ const TradeCrypto = () => {
     }, [])
 
     useEffect(() => {
-        if (fileList.length) {
-            const data = {
-                crypto_amount,
-                usd_amount: values.usd_amount,
-                crypto_wallet_type_id: singleCrypto.crypto_wallet_type_id,
-                crypto_id: singleCrypto.crypto_id,
-                ngn_amount: Number(walletTypes?.usd_rate) * Number(values.usd_amount),
-                proof: fileList[0]?.file
-            }
-
-            setCryptoData(data)
+        const data = {
+            crypto_amount,
+            usd_amount: values.usd_amount,
+            crypto_wallet_type_id: singleCrypto.crypto_wallet_type_id,
+            crypto_id: singleCrypto.crypto_id,
+            ngn_amount: Number(walletTypes?.usd_rate) * Number(values.usd_amount),
         }
-        console.log('Dataaa',)
 
-    }, [singleCrypto, crypto_amount, fileList])
+        setCryptoData(data)
+        console.log('Dattaa', data)
+    }, [singleCrypto, crypto_amount])
 
     const {
         handleSubmit,
@@ -73,7 +69,7 @@ const TradeCrypto = () => {
     } = useFormik({
         initialValues: {
             usd_amount: "",
-            proof: '',
+            // proof: '',
             coin_type: ''
         },
         validationSchema,
@@ -85,7 +81,7 @@ const TradeCrypto = () => {
 
     useEffect(() => {
         if (fileList.length) {
-            for(let ele of fileList){
+            for (let ele of fileList) {
                 setFieldValue('proof', ele.file.name)
             }
         }
@@ -304,123 +300,7 @@ const TradeCrypto = () => {
                                         </Text>
                                     )
                                 }
-                                <Box height='20px' />
-                                <HStack
-                                    align='flex-start'
-                                    width='100%'
-                                    flexDirection={{ base: 'column', md: 'row', lg: 'row' }}
-                                    marginBottom='30px'
-                                >
-                                    <HStack
-                                        justify='center'
-                                        align='center'
-                                        width={{ base: '100%', md: '250px', lg: '250px' }}
-                                        borderRadius='10px'
-                                        height='198px'
-                                        border='1px dotted #10B6E8'
-                                    >
-                                        {
-                                            fileList && fileList.slice(fileList.length -1 ).map(ele => (
-                                                <HStack
-                                                    key={ele.id}
-                                                    bgPos='center'
-                                                    bgSize='contain'
-                                                    width='97%'
-                                                    bgRepeat='no-repeat'
-                                                    height='97%'
-                                                    padding='10px'
-                                                    justify='flex-end'
-                                                    align='flex-start'
-                                                    bgImage={{
-                                                        base: `url(${ele.displayUrl})`,
-                                                    }}
-                                                >
-                                                    <HStack
 
-                                                        height='23px'
-                                                        width='114px'
-                                                        borderRadius='2px'
-                                                        backgroundColor='#FFF1F1'
-                                                        onClick={() => deleteSelectedImage(ele.id)}
-                                                    >
-                                                        <AiFillCloseCircle fill='red' />
-                                                        <Text
-                                                            fontSize='12px'
-                                                            color='red'
-                                                        >
-                                                            Remove Image
-                                                        </Text>
-                                                    </HStack>
-
-                                                </HStack>
-                                            ))
-                                        }
-
-                                    </HStack>
-                                    <input id='input_form' type='file'
-                                        onChange={handleFileUpload}
-                                        style={{
-                                            display: 'none'
-                                        }}
-                                    />
-                                    <label htmlFor="input_form">
-                                        <HStack
-                                            id="input_form"
-                                            justify='center'
-                                            align='center'
-                                            width={{ base: '100%', md: '250px', lg: '250px' }}
-                                            backgroundColor='#F0FCFF'
-                                            borderRadius='10px'
-                                            height='198px'
-                                            marginTop={{ base: '30px', lg: '-3px' }}
-                                            border='1px dotted #10B6E8'
-                                        >
-                                            <VStack
-                                                bgPos='center'
-                                                bgSize='contain'
-                                                width='97%'
-                                                height='97%'
-                                                spacing='10px'
-                                                padding='10px'
-                                                justify='center'
-                                                align='center'
-
-                                            >
-                                                <BsFillCloudUploadFill fill="#10B6E8" size={"30px"} />
-                                                <Text
-                                                    color='#10B6E8'
-                                                    fontSize='18px'
-                                                    fontWeight={400}
-                                                >
-                                                    Add product Image
-                                                </Text>
-                                                <Text
-                                                    textAlign='center'
-                                                    color='#10B6E8'
-                                                    fontSize='10px'
-                                                    fontWeight={500}
-                                                >
-                                                    Please, ensure the image is clearly visible and has the right resolutions
-                                                </Text>
-
-                                            </VStack>
-                                        </HStack>
-                                    </label>
-                                </HStack>
-                                {
-                                    errors.proof && (
-                                        <Text
-                                            fontSize='13px'
-                                            color='red'
-                                            fontWeight={400}
-                                            textAlign='left'
-                                            alignSelf='flex-start'
-                                            fontFamily='Poppins'
-                                        >
-                                            {errors.proof}
-                                        </Text>
-                                    )
-                                }
                                 <Box height='20px' />
                                 <VStack
                                     width='100%'

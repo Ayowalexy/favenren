@@ -9,24 +9,27 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { getCard } from "../../public/redux/reducers/cards/thunkAction";
 import { setSingleGiftcard } from "../../public/redux/reducers/cards";
-
+import { useUser } from "../../public/context/userContext";
 
 
 const Card = ({ img, name, id }) => {
     const router = useRouter();
     const { setActive } = useNavigation();
     const dispatch = useDispatch();
+    const { setCryptoData, cryptoData } = useUser()
+
 
 
     return (
         <Flex
             onClick={() => {
                 dispatch(setSingleGiftcard(id))
+                setCryptoData({...cryptoData, gift_card_id: id})
                 router.push(`/trade-giftcard/${name}`)
             }}
             align='center'
             width={{
-                lg: '23%', md: '30%', base: '45%'
+                lg: '23%', md: '30%', base: '47%'
             }}
             backgroundColor={'#fff'}
             height={{ base: '200px', lg: '265px', md: '265px' }}
@@ -46,7 +49,7 @@ const Card = ({ img, name, id }) => {
             />
             <Text
                 color={'#10B6E8'}
-                fontSize={'18px'}
+                fontSize={{base: '16px', md : '18px', lg: '18px'}}
                 paddingTop='20px'
                 fontWeight={600}
             >
@@ -63,6 +66,7 @@ const GiftCard = () => {
     const { text_2, box_bg } = theme.colors.brand;
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
     const [filtred, setFiltred] = useState([]);
+
 
     const dispatch = useDispatch();
 

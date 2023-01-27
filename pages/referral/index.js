@@ -17,11 +17,9 @@ const Referrals = () => {
     const [amount, setAmount] = useState('')
     const { loading } = useSelector(state => state.cardReducer);
 
-    const { user: { username} } = useAppSelector(
+    const { user: { username}, reward_balance } = useAppSelector(
         ({ authReducer }) => authReducer
     )
-
-
 
     return (
         <Layout>
@@ -88,7 +86,7 @@ const Referrals = () => {
                                 color={'#fff'}
                                 fontSize={{ base: '25px', md: '44px', lg: '44px' }}
                                 fontWeight={600}
-                            >🎯 100</Text>
+                            >🎯 {reward_balance}</Text>
                         </HStack>
                         {
                             isLargerThan600 && (
@@ -180,8 +178,8 @@ const Referrals = () => {
                                         fontSize='12px'
                                         width='100%'
                                         height={{base: '40px', md: '56px', lg: '56px'}}
-                                        type='number'
                                         value={username}
+                                        contentEditable={false}
                                         name='usd_amount'
                                         borderRadius='10px'
                                         backgroundColor='#F7F8F9'

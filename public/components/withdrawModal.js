@@ -40,6 +40,7 @@ const WithdrawModal = ({ isOpen, setIsOpen, setShow, setAmount, type }) => {
     const dispatch = useDispatch();
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
 
+   
     const validationSchema = Yup.object().shape({
         amount: Yup
             .number()
@@ -172,7 +173,7 @@ const WithdrawModal = ({ isOpen, setIsOpen, setShow, setAmount, type }) => {
                                     </>
                                     :
                                     <>
-                                        Limit for this transaction is between <span style={{ fontWeight: '700' }}>₦20</span> and <span style={{ fontWeight: '700' }}>₦100</span>
+                                        Limit for this transaction is between <span style={{ fontWeight: '700' }}>20</span> and <span style={{ fontWeight: '700' }}>100</span>
                                     </>
                             }
                         </Text>

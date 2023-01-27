@@ -15,7 +15,7 @@ import { useFileUpload } from "../../public/hooks/fileUpload";
 import { useFormik } from "formik";
 import { Formik, Field } from "formik";
 import { formatNumber } from "../../public/components/utils/formatter";
-
+import { useUser } from "../../public/context/userContext";
 
 const TradeCard = () => {
     const theme = useTheme();
@@ -31,6 +31,10 @@ const TradeCard = () => {
     const [rangeValue, setRangeValue] = useState("");
     const [showError, setShowError] = useState(false);
     const [selectedValue, setSelectedValue] = useState('')
+    const { setCryptoData, cryptoData } = useUser();
+
+
+
 
     const { deleteSelectedImage, fileList, handleFileUpload } =
         useFileUpload(true);
@@ -56,12 +60,22 @@ const TradeCard = () => {
 
     console.log(value, rangeValue)
 
+    useEffect(() => {
+        if(fileList.length){
+            let names = ['proof', 'second_proof', 'third_proof']
+            for(let ele = 0; ele < fileList.length; ele++){
+                setCryptoData({...cryptoData, [names[ele]]: fileList[ele].file})
+            }
+
+        }
+    }, [fileList])
+
     return (
         <Layout>
             {
-                // loading === 'pending'
-                //     ? <Preloader />
-                //     : 
+                loading === 'pending'
+                    ? <Preloader />
+                    : 
                 (
 
                     <VStack
@@ -115,6 +129,7 @@ const TradeCard = () => {
                                         setSelected(code)
                                         const current = singleGiftcard.find(element => element.country_iso === code);
                                         setCurrentRangeData(current)
+                                        setCryptoData({ ...cryptoData, gift_card_country_id: code })
                                     }}
                                 />
                             </VStack>
@@ -153,6 +168,7 @@ const TradeCard = () => {
                                         setCategories(cat?.categories)
 
                                         setRangeValue(`${el2}-${el3}`)
+                                        setCryptoData({ ...cryptoData, card_range_id: cat.id })
 
                                     }}
                                     placeholder='Select option'>
@@ -192,12 +208,20 @@ const TradeCard = () => {
                                     paddingTop='10px'
                                     border='1px solid rgba(0,0,0,0.1)'
                                     onChange={(e) => {
-                                        setSelectedValue(e.target.value)
+
+
+                                        const category = categories.find(ele => ele.id == e.target.value);
+                                        setSelectedValue(category.amount)
+                                        setCryptoData({
+                                            ...cryptoData,
+                                            gift_card_category_id: e.target.value,
+                                        });
+
                                     }}
                                     placeholder='physical'>
                                     {
                                         categories?.map(element => (
-                                            <option value={`${element.amount}`} key={element.id}>
+                                            <option value={`${element.id}`} key={element.id}>
                                                 {`${element.title}`}
                                             </option>
                                         ))
@@ -224,9 +248,10 @@ const TradeCard = () => {
                                     fontSize='15px'
                                     onChange={(e) => {
                                         setValue(e.target.value);
-                                        if(Number(rangeValue?.split('-')[0]) > Number(value)){
+                                        setCryptoData({ ...cryptoData, card_value: e.target.value })
+                                        if (Number(rangeValue?.split('-')[0]) > Number(value)) {
                                             setShowError(true)
-                                        } else if (Number(rangeValue?.split('-')[1]) < Number(value)){
+                                        } else if (Number(rangeValue?.split('-')[1]) < Number(value)) {
                                             setShowError(true)
                                         } else {
                                             setShowError(false)
@@ -390,6 +415,7 @@ const TradeCard = () => {
                                     backgroundColor='#F7F8F9'
                                     outline='none'
                                     paddingTop='10px'
+                                    onChange={(e) => setCryptoData({...cryptoData, card_value: e.target.value})}
                                     border='1px solid rgba(0,0,0,0.1)'
 
                                 />
@@ -418,8 +444,8 @@ const TradeCard = () => {
                                         color='#000'
                                         fontWeight={500}
                                         fontFamily='Poppins'
-                                        >₦{formatNumber(Number(selectedValue)* Number(value))}<span style={{ fontSize: '14px', color: '#9B9B9B' }}>.00</span>
-                                        </Text>
+                                    >₦{formatNumber(Number(selectedValue) * Number(value))}<span style={{ fontSize: '14px', color: '#9B9B9B' }}>.00</span>
+                                    </Text>
                                 </VStack>
                                 <Button
                                     color='#fff'
@@ -440,7 +466,7 @@ const TradeCard = () => {
                 )
             }
 
-            <ConfirmModal isOpen={isOpen} setIsOpen={setIsOpen} setIsSuccessOpen={setIsSuccessOpen} isSuccessOpen={isSuccessOpen} />
+            <ConfirmModal isOpen={isOpen} setIsOpen={setIsOpen} type='gift card' setIsSuccessOpen={setIsSuccessOpen} isSuccessOpen={isSuccessOpen} />
             <SuccessModal isOpen={isSuccessOpen} setIsOpen={setIsSuccessOpen} />
 
         </Layout >

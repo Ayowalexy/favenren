@@ -11,8 +11,9 @@ import { useAppSelector } from "../../public/redux/store";
 import { useDispatch } from "react-redux";
 import { getWalletAddress } from "../../public/redux/reducers/cards/thunkAction";
 import { Preloader } from "../Auth/otp";
-
-
+import { AiFillCloseCircle } from 'react-icons/ai'
+import { useFileUpload } from "../../public/hooks/fileUpload";
+import { useUser } from "../../public/context/userContext";
 
 const TradeCoin = () => {
     const [coin, setCoin] = useState("");
@@ -23,12 +24,15 @@ const TradeCoin = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isSuccessOpen, setIsSuccessOpen] = useState(false);
     const dispatch = useDispatch();
+    const { setCryptoData, cryptoData } = useUser();
 
     const { singleCrypto, walletAddress, loading } = useAppSelector(
         ({ cardReducer }) => cardReducer
     )
+    const { deleteSelectedImage, fileList, handleFileUpload } =
 
-    console.log('wallet address', walletAddress)
+        useFileUpload(true);
+
 
     const { text_2, btn, text_3, faded_bg } = theme.colors.brand;
 
@@ -43,8 +47,14 @@ const TradeCoin = () => {
         }
     }, [singleCrypto])
 
+    useEffect(() => {
+        if(fileList.length){
+            setCryptoData({...cryptoData, proof: fileList[0].file})
+        }
+    }, [fileList])
 
-    
+
+
     return (
         <Layout>
             {
@@ -155,35 +165,120 @@ const TradeCoin = () => {
                                     To complete this transaction, you are to send the sum of 0.000023432BTC to the bitcoin address above. You can click on the button abbove to copy the wallet address or scan the QR code. Upload the payment proof below as soon as done to confirm this transaction.
                                 </Text>
                                 <Box />
-                                <VStack
-                                    backgroundColor={faded_bg}
-                                    borderRadius='10px'
-                                    height='208px'
-                                    border={`1px solid ${btn}`}
-                                    width='95%'
-                                    spacing='20px'
-                                    align='center'
-                                    justify='center'
+
+                                <HStack
+                                    align='flex-start'
+                                    width='100%'
+                                    flexDirection={{ base: 'column', md: 'row', lg: 'row' }}
+                                    marginBottom='30px'
                                 >
-                                    <BsFillCloudUploadFill fill="#10B6E8" size={"30px"} />
-                                    <Text
-                                        color={btn}
-                                        fontSize={'18px'}
-                                        fontWeight={500}
-                                    >
-                                        Add Crypto Payment proof
-                                    </Text>
-                                    <Text
-                                        color={'rgba(49, 68, 96, 0.5)'}
+                                    {
+                                        Boolean(fileList.length) && (
+
+
+                                            <HStack
+                                                justify='center'
+                                                align='center'
+                                                width={{ base: '100%', md: '250px', lg: '250px' }}
+                                                borderRadius='10px'
+                                                height='198px'
+                                                border='1px dotted #10B6E8'
+                                            >
+                                                {
+                                                    fileList.slice(fileList.length - 1).map(ele => (
+                                                        <HStack
+                                                            key={ele.id}
+                                                            bgPos='center'
+                                                            bgSize='contain'
+                                                            width='97%'
+                                                            bgRepeat='no-repeat'
+                                                            height='97%'
+                                                            padding='10px'
+                                                            justify='flex-end'
+                                                            align='flex-start'
+                                                            bgImage={{
+                                                                base: `url(${ele.displayUrl})`,
+                                                            }}
+                                                        >
+                                                            <HStack
+
+                                                                height='23px'
+                                                                width='114px'
+                                                                borderRadius='2px'
+                                                                backgroundColor='#FFF1F1'
+                                                                onClick={() => deleteSelectedImage(ele.id)}
+                                                            >
+                                                                <AiFillCloseCircle fill='red' />
+                                                                <Text
+                                                                    fontSize='12px'
+                                                                    color='red'
+                                                                >
+                                                                    Remove Image
+                                                                </Text>
+                                                            </HStack>
+
+                                                        </HStack>
+                                                    ))
+                                                }
+
+                                            </HStack>
+                                        )
+                                    }
+                                    <input id='input_form' type='file'
+                                        onChange={handleFileUpload}
+                                        style={{
+                                            display: 'none'
+                                        }}
+                                    />
+                                    <label htmlFor="input_form">
+                                        {
+                                            !Boolean(fileList.length) && (
+                                                <VStack
+                                                    backgroundColor={faded_bg}
+                                                    borderRadius='10px'
+                                                    height='208px'
+                                                    border={`1px solid ${btn}`}
+                                                    width='95%'
+                                                    spacing='20px'
+                                                    align='center'
+                                                    justify='center'
+                                                >
+                                                    <BsFillCloudUploadFill fill="#10B6E8" size={"30px"} />
+                                                    <Text
+                                                        color={btn}
+                                                        fontSize={'18px'}
+                                                        fontWeight={500}
+                                                    >
+                                                        Add Crypto Payment proof
+                                                    </Text>
+                                                    <Text
+                                                        color={'rgba(49, 68, 96, 0.5)'}
+                                                        fontSize={'14px'}
+                                                        fontWeight={400}
+                                                        width='80%'
+                                                        textAlign='center'
+                                                    >
+                                                        Please ensure that the card number is clearly visible and in focus along with other items in the photo you are about to submit
+                                                    </Text>
+
+                                                </VStack>
+                                            )
+                                        }
+                                    </label>
+                                </HStack>
+                                {
+                                    !Boolean(fileList.length) && (
+                                        <Text
+                                        color={'red'}
+                                        alignSelf='flex-start'
                                         fontSize={'14px'}
                                         fontWeight={400}
-                                        width='80%'
-                                        textAlign='center'
-                                    >
-                                        Please ensure that the card number is clearly visible and in focus along with other items in the photo you are about to submit
-                                    </Text>
+                                        >
+                                            Proof is required
+                                        </Text>
+                                    )
+                                }
 
-                                </VStack>
                                 <Button
                                     marginTop='40px'
                                     alignSelf='center'
@@ -199,11 +294,12 @@ const TradeCoin = () => {
 
                             </VStack>
                         </Box>
-                        <ConfirmModal 
-                            isOpen={isOpen} 
-                            setIsOpen={setIsOpen} 
-                            setIsSuccessOpen={setIsSuccessOpen} 
-                            isSuccessOpen={isSuccessOpen} 
+                        <ConfirmModal
+                            isOpen={isOpen}
+                            type='crypto'
+                            setIsOpen={setIsOpen}
+                            setIsSuccessOpen={setIsSuccessOpen}
+                            isSuccessOpen={isSuccessOpen}
                             wallet_id={walletAddress?.crypto_wallet_type_id}
 
                         />

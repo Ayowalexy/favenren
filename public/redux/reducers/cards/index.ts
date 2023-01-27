@@ -11,7 +11,8 @@ import {
   getUserBankAccount,
   withdrawReward,
   verifyAccount,
-  withdrawWallet
+  withdrawWallet,
+  makegiftcard
 } from "./thunkAction";
 
 interface crytoTypes {
@@ -268,6 +269,22 @@ const cardSlice = createSlice({
     });
 
     builder.addCase(verifyAccount.rejected, (state, action) => {
+      const actionError = action.payload
+      console.log("actionError", actionError)
+      return { ...state, loading: "failed", };
+    });
+
+    //make giftcard transaction
+    builder.addCase(makegiftcard.pending, (state) => {
+      return { ...state, loading: "pending" };
+    });
+
+    builder.addCase(makegiftcard.fulfilled, (state, action) => {
+      console.log('ressss', action.payload)
+      return { ...state, loading: "successful", };
+    });
+
+    builder.addCase(makegiftcard.rejected, (state, action) => {
       const actionError = action.payload
       console.log("actionError", actionError)
       return { ...state, loading: "failed", };

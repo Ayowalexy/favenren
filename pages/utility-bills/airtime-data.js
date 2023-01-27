@@ -54,7 +54,7 @@ const BillsPayment = () => {
         onSubmit: async (values) => {
             if (type === 'airtime') {
                 await dispatch(buyAirtime(values)).then(res => {
-                    if (res.meta.requestStatus === 'fultilled') {
+                    if (res.meta.requestStatus === 'fulfilled') {
                         toast({
                             title: 'Success',
                             description: `You just recharged ₦${formatNumber(values.amount)}`,
@@ -72,7 +72,7 @@ const BillsPayment = () => {
                     variation_name: selectedPlan?.name
                 }
                 await dispatch(buyData(data)).then(res => {
-                    if (res.meta.requestStatus === 'fultilled') {
+                    if (res.meta.requestStatus === 'fulfilled') {
                         toast({
                             title: 'Success',
                             description: `You just recharged ₦${formatNumber(values.amount)}`,
