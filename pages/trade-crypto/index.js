@@ -45,6 +45,7 @@ const TradeCrypto = () => {
         dispatch(getCryto())
     }, [])
 
+
     useEffect(() => {
         const data = {
             crypto_amount,

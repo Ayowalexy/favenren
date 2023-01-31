@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { updatePassword } from "../../public/redux/reducers/auth/thunkAction";
 import { useDispatch } from "react-redux";
-import { getBanks, getUserBankAccount } from "../../public/redux/reducers/cards/thunkAction";
+import { getBanks, getUserBankAccount, verifyAccount } from "../../public/redux/reducers/cards/thunkAction";
 import AddUserBank from "./addbank";
 
 
@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
     ),
 })
 
- export const VButton = ({ children, isLoading, onClick }) => {
+export const VButton = ({ children, isLoading, onClick }) => {
     const theme = useTheme();
     const { text_2, btn } = theme.colors.brand;
 
@@ -47,7 +47,7 @@ const validationSchema = Yup.object().shape({
     )
 }
 
-const IIput = ({ label, name, value }) => {
+const IIput = ({ label, name, value, onChange, onChange_ = false }) => {
     const [val, setVal] = useState(value)
     return (
         <VStack
@@ -70,7 +70,7 @@ const IIput = ({ label, name, value }) => {
                 width='100%'
                 value={val}
                 height='60px'
-                onChange={e => setVal(e.target.value)}
+                onChange={e => onChange_ ? onChange(e) : setVal(e.target.value)}
                 borderRadius='10px'
                 backgroundColor='#F7F8F9'
                 outline='none'
@@ -124,6 +124,7 @@ const Account = () => {
     const { text_2, btn } = theme.colors.brand;
     const dispatch = useDispatch();
     const toast = useToast();
+    const [formDetails, setFormDetails] = useState({});
     const { user: { username, name, email, phone }, loading } = useAppSelector(
         ({ authReducer }) => authReducer
     )
@@ -135,6 +136,45 @@ const Account = () => {
     useEffect(() => {
         dispatch(getUserBankAccount())
     }, [])
+
+    useEffect(() => {
+        if (bankAccount.account_name && bankAccount.account_number) {
+            setFormDetails({
+                bank_name: bankAccount.bank_name,
+                account_number: bankAccount.account_number,
+                account_name: bankAccount.account_name
+            })
+        }
+    }, [bankAccount])
+
+
+    const handleUpdateBank = async () => {
+
+        console.log(formDetails)
+        await dispatch(verifyAccount(formDetails)).then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+                 toast({
+                    title: 'Bank account verified and added successfully',
+                    description: "Bank not found",
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                    position: 'top-right'
+                })
+                dispatch(getUserBankAccount())
+            } else {
+                toast({
+                    title: 'Failed.',
+                    description: "Bank not found",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                    position: 'top-right'
+                })
+            }
+        })
+
+    }
 
 
     const {
@@ -170,6 +210,7 @@ const Account = () => {
             })
         },
     });
+
 
 
 
@@ -296,25 +337,111 @@ const Account = () => {
                                             margin={{ base: '0px', md: '30px 20px', lg: '30px 20px' }}
                                             width={{ base: '100%', md: '80%', lg: '80%' }}
                                         >
-                                            <IIput
-                                                label='Account Number'
-                                                name='Account Number'
-                                                value={bankAccount?.account_number}
+                                            <VStack
+                                                spacing='5px'
+                                                align='flex-start'
+                                                width='100%'
+                                            >
 
-                                            />
-                                            <IIput
-                                                label='Bank'
-                                                name='Bank'
-                                                value={bankAccount?.bank_name}
-                                            />
-                                            <IIput
-                                                label='Account Holder’s Name'
-                                                name='name'
-                                                value={bankAccount?.account_name}
-                                            />
+                                                <Text
+                                                    fontSize='16px'
+                                                    color='#333F51'
+                                                    paddingTop='20px'
+                                                    fontWeight={500}
+                                                    fontFamily='Poppins'
+                                                >Account number</Text>
+                                                <Input
+                                                    color='#8896AB'
+                                                    fontWeight={400}
+                                                    fontSize='15px'
+                                                    width='100%'
+                                                    value={formDetails.account_number}
+                                                    height='60px'
+                                                    onChange={e => setFormDetails({...formDetails, account_number: e.target.value})}
+                                                    borderRadius='10px'
+                                                    backgroundColor='#F7F8F9'
+                                                    outline='none'
+                                                    paddingLeft='20px'
+                                                    border='1px solid rgba(0,0,0,0.1)'
+                                                    placeholder={name}
+                                                />
+                                            </VStack>
+                                            <VStack
+                                                align='flex-start'
+                                                margin={{ base: '0px', md: '30px 20px', lg: '30px 20px' }}
+                                                width={'100%'}
+                                            >
+
+                                                <Text
+                                                    fontSize='16px'
+                                                    color='#333F51'
+                                                    paddingTop='20px'
+                                                    fontWeight={500}
+                                                    fontFamily='Poppins'
+                                                >Select bank</Text>
+                                                <Select
+                                                    color='#8896AB'
+                                                    fontWeight={400}
+                                                    fontSize='15px'
+                                                    width='100%'
+                                                    height='60px'
+                                                    borderRadius='10px'
+                                                    backgroundColor='#F7F8F9'
+                                                    outline='none'
+                                                    paddingTop='10px'
+                                                    border='1px solid rgba(0,0,0,0.1)'
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        const bank_name = value.split('|')[0]
+                                                        const bank_code = value.split('|')[1]
+                                                        setFormDetails({
+                                                            ...formDetails,
+                                                            bank_name,
+                                                            bank_code: bank_code.trimStart()
+                                                        })
+
+
+                                                    }}
+                                                    placeholder='Select bank'>
+                                                    {
+                                                        allBanks?.map(element => (
+                                                            <option selected={element.name === bankAccount?.bank_name ? true : false} key={element.id} value={`${element.name} | ${element.code}`}>{element.name}</option>
+                                                        ))
+                                                    }
+                                                </Select>
+                                            </VStack>
+                                            <VStack
+                                                spacing='5px'
+                                                align='flex-start'
+                                                width='100%'
+                                            >
+
+                                                <Text
+                                                    fontSize='16px'
+                                                    color='#333F51'
+                                                    paddingTop='20px'
+                                                    fontWeight={500}
+                                                    fontFamily='Poppins'
+                                                >Account name</Text>
+                                                <Input
+                                                    color='#8896AB'
+                                                    fontWeight={400}
+                                                    fontSize='15px'
+                                                    width='100%'
+                                                    value={formDetails.account_name}
+                                                    height='60px'
+                                                    onChange={e => setFormDetails({ ...formDetails, account_name: e.target.value })}
+                                                    borderRadius='10px'
+                                                    backgroundColor='#F7F8F9'
+                                                    outline='none'
+                                                    paddingLeft='20px'
+                                                    border='1px solid rgba(0,0,0,0.1)'
+                                                    placeholder={name}
+                                                />
+                                            </VStack>
 
                                             <HStack align='flex-start'>
-                                                <VButton>
+                                                <VButton onClick={handleUpdateBank} isLoading={loading === 'pending' ? true : false}>
                                                     Update Bank details
                                                 </VButton>
                                             </HStack>

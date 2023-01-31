@@ -129,7 +129,8 @@ const TradeCard = () => {
                                         setSelected(code)
                                         const current = singleGiftcard.find(element => element.country_iso === code);
                                         setCurrentRangeData(current)
-                                        setCryptoData({ ...cryptoData, gift_card_country_id: code })
+                                        console.log("singleGiftcard", singleGiftcard)
+                                        setCryptoData({ ...cryptoData, gift_card_country_id: current?.id })
                                     }}
                                 />
                             </VStack>
